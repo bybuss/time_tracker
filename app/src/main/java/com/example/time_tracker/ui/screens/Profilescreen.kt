@@ -1,4 +1,4 @@
-package com.example.mobileapp.screens
+package com.example.time_tracker.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -32,7 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.R
+import com.example.time_tracker.R
 
 @Composable
 fun ProfileScreen() {
@@ -44,8 +44,8 @@ fun ProfileScreen() {
                 .fillMaxSize()
                 .padding(top = 70.dp)
         ){
-                item {ProfileTopCard()}
-                item {ProfileBottomCard()}
+                item { ProfileTopCard() }
+                item { ProfileBottomCard() }
         }
     }
 }

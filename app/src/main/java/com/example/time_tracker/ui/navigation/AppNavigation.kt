@@ -1,4 +1,4 @@
-    package com.example.mobileapp.navigation
+    package com.example.time_tracker.ui.navigation
 
     import androidx.compose.foundation.background
     import androidx.compose.foundation.clickable
@@ -28,11 +28,11 @@
     import androidx.navigation.compose.composable
     import androidx.navigation.compose.currentBackStackEntryAsState
     import androidx.navigation.compose.rememberNavController
-    import com.example.mobileapp.R
-    import com.example.mobileapp.screens.ProfileScreen
-    import com.example.mobileapp.screens.TaskMenu
-    import com.example.mobileapp.screens.TasksListScreen
-    import com.example.mobileapp.screens.TasksScreen
+    import com.example.time_tracker.R
+    import com.example.time_tracker.ui.screens.ProfileScreen
+    import com.example.time_tracker.screens.TaskMenu
+    import com.example.time_tracker.screens.TasksListScreen
+    import com.example.time_tracker.screens.TasksScreen
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

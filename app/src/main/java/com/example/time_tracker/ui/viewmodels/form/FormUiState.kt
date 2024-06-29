@@ -1,4 +1,4 @@
-package com.example.mobileapp.ui.viewmodels.form
+package com.example.time_tracker.ui.viewmodels.form
 
 data class FormUiState(
     val title: String  = "",

@@ -1,4 +1,4 @@
-package com.example.mobileapp.ui.viewmodels.card
+package com.example.time_tracker.ui.viewmodels.card
 
 import androidx.lifecycle.ViewModel
 

@@ -1,4 +1,4 @@
-package com.example.mobileapp.ui.theme
+package com.example.time_tracker.ui.theme
 
 import android.app.Activity
 import android.os.Build

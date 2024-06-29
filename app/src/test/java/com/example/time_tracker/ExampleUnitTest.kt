@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.time_tracker
 
 import org.junit.Test
 

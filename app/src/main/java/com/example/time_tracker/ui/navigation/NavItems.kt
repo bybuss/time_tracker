@@ -1,4 +1,4 @@
-package com.example.mobileapp.navigation
+package com.example.time_tracker.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange

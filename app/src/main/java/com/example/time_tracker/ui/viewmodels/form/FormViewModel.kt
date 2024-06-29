@@ -1,8 +1,7 @@
-package com.example.mobileapp.ui.viewmodels.form
+package com.example.time_tracker.ui.viewmodels.form
 
 import androidx.lifecycle.ViewModel
-import com.example.mobileapp.data.TaskItem
-import com.example.mobileapp.data.tasks
+import com.example.time_tracker.data.TaskItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

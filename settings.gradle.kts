@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "mobile app"
+rootProject.name = "time_tracker"
 include(":app")
  

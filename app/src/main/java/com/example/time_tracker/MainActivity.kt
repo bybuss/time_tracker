@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.time_tracker
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,8 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mobileapp.navigation.AppNavigation
-import com.example.mobileapp.ui.theme.MobileAppTheme
+import com.example.time_tracker.ui.navigation.AppNavigation
+import com.example.time_tracker.ui.theme.MobileAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

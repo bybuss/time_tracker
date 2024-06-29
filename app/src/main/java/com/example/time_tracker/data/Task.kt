@@ -1,4 +1,4 @@
-package com.example.mobileapp.data
+package com.example.time_tracker.data
 
 data class TaskItem(
     val id: Int,

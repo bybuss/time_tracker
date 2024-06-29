@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mobileapp"
+    namespace = "com.example.time_tracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mobileapp"
+        applicationId = "com.example.time_tracker"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

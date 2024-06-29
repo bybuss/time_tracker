@@ -1,4 +1,4 @@
-package com.example.mobileapp.ui.theme
+package com.example.time_tracker.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
