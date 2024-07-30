@@ -1,7 +1,11 @@
-package com.example.time_tracker.ui.screens
+package com.example.time_tracker.ui.screens.profile
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedCard
@@ -28,11 +32,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.time_tracker.R
+import com.example.time_tracker.ui.openTelegramLink
+import com.example.time_tracker.ui.screens.BackgroungImage
 
 @Composable
 fun ProfileScreen() {
@@ -113,6 +121,10 @@ fun ProfileTopCard() {
 
 @Composable
 fun ProfileBottomCard() {
+
+    val context = LocalContext.current
+    val url: String = "https://t.me/stray_chat"
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,11 +155,11 @@ fun ProfileBottomCard() {
                             text = "Персональные данные",
                             color = Color.Black,
                         )
-                        Divider(
-                            thickness = 1.dp,
+                        HorizontalDivider(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
 //                                .padding(bottom = 16.dp, start = 16.dp)
+                            thickness = 1.dp
                         )
                         Row {
                             Column(
@@ -156,7 +168,7 @@ fun ProfileBottomCard() {
                                     .padding(top = 8.dp),
                                 horizontalAlignment = Alignment.Start
                             ){
-                                Text(text = "Полное имя")
+                                Text(text = "Полное имя", color = Color.DarkGray)
                                 Text(text = "Zorenko Konstantin", color = Color.Black,)
                             }
                             Column(
@@ -165,7 +177,7 @@ fun ProfileBottomCard() {
                                     .padding(top = 4.dp),
                                 horizontalAlignment = Alignment.Start
                             ){
-                                Text(text = "Почта")
+                                Text(text = "Почта", color = Color.DarkGray)
                                 Text(text = "konstantinzorenko3@gmail.com", color = Color.Black,)
                             }
                         }
@@ -189,13 +201,19 @@ fun ProfileBottomCard() {
                             text = "Временной пояс",
                             color = Color.Black,
                         )
-                        Divider(
-                            thickness = 1.dp,
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp, start = 16.dp)
+                                .padding(bottom = 16.dp, start = 16.dp),
+                            thickness = 1.dp
                         )
-
+                        Text (
+                            text = "👉 пример ссылки на телеграммчикс 👈",
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier.clickable {
+                                openTelegramLink(context, url)
+                            }
+                        )
                     }
                 }
             }
@@ -216,11 +234,11 @@ fun ProfileBottomCard() {
                             text = "Тема приложения",
                             color = Color.Black,
                         )
-                        Divider(
-                            thickness = 1.dp,
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth(0.9f)
-                                .padding(bottom = 16.dp, start = 16.dp)
+                                .padding(bottom = 16.dp, start = 16.dp),
+                            thickness = 1.dp
                         )
                         Text(
                             text = "Так меняют тему тока педики, котлин автоматически подтягивает тему с устройства",

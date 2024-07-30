@@ -37,12 +37,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.time_tracker.ui.screens.BackgroungImage
-import com.example.time_tracker.ui.viewmodels.form.FormViewModel
+import com.example.time_tracker.ui.screens.createTask.FormViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskMenu(
-        navController: NavController,
-        formViewModel: FormViewModel = viewModel(),
+    navController: NavController,
+    formViewModel: FormViewModel = viewModel(),
 ) {
    val formUiState = formViewModel.uiState.collectAsState()
 

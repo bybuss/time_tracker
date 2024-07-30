@@ -1,4 +1,4 @@
-package com.example.time_tracker.data
+package com.example.time_tracker.domain.model
 
 data class TaskItem(
     val id: Int,
@@ -11,7 +11,7 @@ data class TaskItem(
     val projectId: Int? = null
 )
 
-val tasks = mutableListOf<TaskItem>(
+val mockTasks = listOf(
     TaskItem(
         id = 1,
         title = "Спортзал",
@@ -109,7 +109,7 @@ val tasks = mutableListOf<TaskItem>(
         endDate = "2024/02/23",
         startTime = "16:00",
         endTime = "17:30",
-        isActive = false,
+        isActive = true,
         projectId = 109
     )
 )

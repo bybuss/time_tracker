@@ -1,7 +1,8 @@
-package com.example.time_tracker.ui.viewmodels.form
+package com.example.time_tracker.ui.screens.createTask
 
 import androidx.lifecycle.ViewModel
-import com.example.time_tracker.data.TaskItem
+import com.example.time_tracker.domain.model.TaskItem
+import com.example.time_tracker.domain.model.mockTasks
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,7 @@ class FormViewModel: ViewModel(){
     private val _uiState = MutableStateFlow(FormUiState())
     val uiState: StateFlow<FormUiState> = _uiState.asStateFlow()
 
-    private val _tasks = MutableStateFlow(mutableListOf<TaskItem>())
+    private val _tasks = MutableStateFlow(mockTasks)
     val tasks: StateFlow<List<TaskItem>> = _tasks.asStateFlow()
 
     fun updateTitle(title: String){
@@ -60,7 +61,7 @@ class FormViewModel: ViewModel(){
     }
 
     // Очистка формы
-    fun clearForm(){
+    fun clearForm() {
         _uiState.value = FormUiState()
     }
 
@@ -68,3 +69,12 @@ class FormViewModel: ViewModel(){
         return if (_tasks.value.isNotEmpty()) _tasks.value.last().id + 1  else 1
     }
 }
+
+data class FormUiState(
+    val title: String  = "",
+    val startDate: String = "",
+    val endDate: String = "",
+    val startTime: String = "",
+    val endTime: String = "",
+    val asanaUrl: String = "",
+)

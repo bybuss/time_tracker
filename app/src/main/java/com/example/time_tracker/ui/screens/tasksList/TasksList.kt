@@ -38,13 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.time_tracker.R
-import com.example.time_tracker.data.TaskItem
+import com.example.time_tracker.domain.model.TaskItem
 import com.example.time_tracker.ui.navigation.TabSelection
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.time_tracker.ui.screens.BackgroungImage
-import com.example.time_tracker.ui.viewmodels.form.FormViewModel
+import com.example.time_tracker.ui.screens.createTask.FormViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

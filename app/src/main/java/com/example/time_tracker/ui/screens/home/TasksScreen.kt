@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-import com.example.time_tracker.CurrentDate
+import com.example.time_tracker.ui.CurrentDate
 import com.example.time_tracker.R
 import com.example.time_tracker.ui.navigation.Screens
 import com.example.time_tracker.ui.screens.BackgroungImage

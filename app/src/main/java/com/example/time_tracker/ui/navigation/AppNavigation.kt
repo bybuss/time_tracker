@@ -29,7 +29,7 @@
     import androidx.navigation.compose.currentBackStackEntryAsState
     import androidx.navigation.compose.rememberNavController
     import com.example.time_tracker.R
-    import com.example.time_tracker.ui.screens.ProfileScreen
+    import com.example.time_tracker.ui.screens.profile.ProfileScreen
     import com.example.time_tracker.screens.TaskMenu
     import com.example.time_tracker.screens.TasksListScreen
     import com.example.time_tracker.screens.TasksScreen

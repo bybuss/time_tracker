@@ -1,4 +1,4 @@
-package com.example.time_tracker
+package com.example.time_tracker.ui
 
 import androidx.compose.runtime.Composable
 import java.util.Calendar
