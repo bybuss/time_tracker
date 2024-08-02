@@ -23,8 +23,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -36,8 +37,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.time_tracker.ui.navigation.NavigationDestination
 import com.example.time_tracker.ui.screens.BackgroungImage
 import com.example.time_tracker.ui.screens.createTask.FormViewModel
+
+object TaskDestination: NavigationDestination {
+    override val route = "createTask"
+    override val title = "Создать задачу"
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskMenu(
@@ -95,8 +103,8 @@ fun TaskMenu(
                     onValueChange = {formViewModel.updateTitle(it)},
                     label = { Text("Название... |", color = Color.LightGray) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor  = Color.White
                     )
                 )
 
@@ -113,8 +121,8 @@ fun TaskMenu(
                         modifier = Modifier
                             .weight(1f)
                             .align(Alignment.CenterVertically),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            containerColor = Color.White
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor  = Color.White
                         )
                     )
 
@@ -137,8 +145,8 @@ fun TaskMenu(
                         modifier = Modifier
                             .weight(1f)
                             .align(Alignment.CenterVertically),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            containerColor = Color.White
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor  = Color.White
                         )
                     )
                 }
@@ -157,8 +165,8 @@ fun TaskMenu(
                         modifier = Modifier
                             .weight(1f)
                             .align(Alignment.CenterVertically),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            containerColor = Color.White
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor  = Color.White
                         )
                     )
 
@@ -169,8 +177,8 @@ fun TaskMenu(
                         onValueChange = {formViewModel.updateEndTime(it)},
                         label = { Text("10минут", color = Color.LightGray) },
                         modifier = Modifier.weight(1f),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            containerColor = Color.White
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor  = Color.White
                         )
                     )
                 }

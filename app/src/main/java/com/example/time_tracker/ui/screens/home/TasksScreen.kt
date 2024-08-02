@@ -34,8 +34,14 @@ import androidx.navigation.compose.rememberNavController
 
 import com.example.time_tracker.ui.CurrentDate
 import com.example.time_tracker.R
+import com.example.time_tracker.ui.navigation.NavigationDestination
 import com.example.time_tracker.ui.navigation.Screens
 import com.example.time_tracker.ui.screens.BackgroungImage
+
+object HomeDestination : NavigationDestination {
+    override val route = "home"
+    override val title = "Главный экран"
+}
 
 @Composable
 fun TasksScreen(navController: NavController) {

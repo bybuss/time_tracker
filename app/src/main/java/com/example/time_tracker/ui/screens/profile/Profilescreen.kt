@@ -39,8 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.time_tracker.R
+import com.example.time_tracker.ui.navigation.NavigationDestination
 import com.example.time_tracker.ui.openTelegramLink
 import com.example.time_tracker.ui.screens.BackgroungImage
+
+object ProfileDestination: NavigationDestination {
+    override val route: String = "profile"
+    override val title: String = "Профиль"
+}
 
 @Composable
 fun ProfileScreen() {

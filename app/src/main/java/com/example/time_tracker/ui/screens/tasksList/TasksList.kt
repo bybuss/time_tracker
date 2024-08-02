@@ -43,8 +43,14 @@ import com.example.time_tracker.ui.navigation.TabSelection
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.time_tracker.ui.navigation.NavigationDestination
 import com.example.time_tracker.ui.screens.BackgroungImage
 import com.example.time_tracker.ui.screens.createTask.FormViewModel
+
+object TasksListDestinations: NavigationDestination {
+    override val route = "tasksList"
+    override val title = "Список задач"
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
