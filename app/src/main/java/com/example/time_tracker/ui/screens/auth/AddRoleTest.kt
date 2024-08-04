@@ -3,8 +3,10 @@ package com.example.time_tracker.ui.screens.auth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,12 +33,41 @@ fun AddRoleTestScreen() {
     val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val uiState by signUpViewModel.uiState.collectAsState()
     val permissions: Map<String, Boolean> = mapOf("insert" to true, "update" to true, "read" to true)
-    val name = "member"
+    val roleName = "member"
     val coroutineScope = rememberCoroutineScope()
+    val firstName = "eblo"
+    val lastName = "slona"
+    val roleId = 1
+    val email = "babakapa729@gmail.com"
+    val password = "string"
+    val organizationName = "organization"
+    val description = "description"
+
 
     AddRoleTest(
         uiState = uiState,
-        retryAction = {coroutineScope.launch{ signUpViewModel.addRole(name, permissions) }}
+//        retryAction = {coroutineScope.launch{signUpViewModel.addRole(
+//            name = roleName,
+//            permissions = permissions,
+//        )}}
+
+//        retryAction = {coroutineScope.launch{signUpViewModel.authUser(
+//            email = email,
+//            password = password
+//        )}}
+
+//        retryAction = {coroutineScope.launch{signUpViewModel.addUser(
+//            firstName = firstName,
+//            lastName = lastName,
+//            roleId = roleId,
+//            email = email,
+//            password = password
+//        )}}
+
+        retryAction = {coroutineScope.launch{signUpViewModel.addOrganization(
+            name = organizationName,
+            description = description,
+        )}}
     )
 }
 
@@ -44,20 +75,24 @@ fun AddRoleTestScreen() {
 fun AddRoleTest(uiState: SignUpUiState, retryAction: () -> Unit) {
     when (uiState) {
         is SignUpUiState.Loading -> {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    Text(text = "Loading...", modifier = Modifier.fillMaxHeight())
-                    CircularProgressIndicator(color = Color.White, modifier = Modifier.fillMaxHeight())
+                    Text(text = "Loading...")
+                    CircularProgressIndicator()
                 }
                 Button(onClick = { retryAction() }){Text("Retry")}
             }
         }
 
         is SignUpUiState.Success -> {
-            Text(text = "Success: ${uiState.id}", modifier = Modifier.fillMaxSize())
+            Text(text = "${uiState.id}", modifier = Modifier.fillMaxSize())
         }
 
         is SignUpUiState.Error -> {
@@ -66,12 +101,10 @@ fun AddRoleTest(uiState: SignUpUiState, retryAction: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Error: ${uiState.exception}")
                 Button(onClick = { retryAction() }){Text("Retry")}
+                Text(text = uiState.exception, modifier = Modifier.fillMaxSize())
             }
-
 
         }
     }
 }
-

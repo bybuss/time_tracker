@@ -5,6 +5,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.apollographql.apollo3")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
 }
 
 apollo {
@@ -101,6 +102,10 @@ dependencies {
     // Apollo
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
     implementation("com.apollographql.apollo3:apollo-normalized-cache-sqlite:3.8.2")
+
+    // Json converter
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")

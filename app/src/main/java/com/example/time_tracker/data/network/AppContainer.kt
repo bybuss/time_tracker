@@ -1,11 +1,12 @@
 package com.example.time_tracker.data.network
 
 import android.content.Context
+import android.provider.Settings
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 
 /**
  * @author bybuss
@@ -15,20 +16,21 @@ interface AppContainer {
     val timeTrackerRepository: TimeTrackerRepository
 }
 
-class AppContainerImpl: AppContainer {
+class AppContainerImpl(private val context: Context): AppContainer {
     private val baseUrl = "http://31.128.45.95:8000/graphql"
+    private val token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiZDY5NWYyNTYtMjFmMy00YmEwLTljNTItYmVjNzYyOTgxM2EyIiwiZW1haWwiOiJiYWJha2FwYTcyOUBnbWFpbC5jb20iLCJyb2xlX2lkIjoxLCJleHAiOjE3MjI4NjE5MDcsImlhdCI6MTcyMjc3MTkwN30.QJANVcjPhVXlY2VioOsStnsLKCGiK7Gg1JYLKq6nNRA31FwLn50AHxURzQpwSzGABMG-AY74wFDi4E4KxfJQOJT0AFhypYTQj6KXb8-U8vee2HtWTqtQpXRuvM4-PMbtTp0a8yb8GwiqntIdeu3daJEfgf-1jE678sPHGY8syyIHL8IcG1KCpoHUESq1UJmKGgH6HJ82Spenks7jsTUSV8lP1OjykGmgqssMEvbTi8TIP-IejwcaoRFIO2NZUoIrFUUz7Yx-kdf5V26yUiakWsUItnvIp3xOdsE2bm5MC0RXqguCPsKl97iKur-YneHDtzYn954ll5_-7UGSXAmtyg"
 
 //    private val okHttpClient = OkHttpClient.Builder()
-//        .addInterceptor(Interceptor { chain ->
-//            val request = chain.request().newBuilder()
-//                .addHeader("Authorization", token)
-//                .build()
-//            chain.proceed(request)
-//        })
+//        .addInterceptor(AuthorizationInterceptor())
 //        .build()
-
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(AuthorizationInterceptor())
+        .addInterceptor(Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", token)
+                .addHeader("fingerprint", getDeviceFingerprint(context))
+                .build()
+            chain.proceed(request)
+        })
         .build()
 
     private val apolloClient = ApolloClient.Builder()
@@ -39,16 +41,24 @@ class AppContainerImpl: AppContainer {
     override val timeTrackerRepository: TimeTrackerRepository by lazy {
         TimeTrackerRepository(apolloClient)
     }
-}
 
-private class AuthorizationInterceptor() : Interceptor {
-    private val token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiZDY5NWYyNTYtMjFmMy00YmEwLTljNTItYmVjNzYyOTgxM2EyIiwiZW1haWwiOiJiYWJha2FwYTcyOUBnbWFpbC5jb20iLCJyb2xlX2lkIjoxLCJleHAiOjE3MjI3MTc4MjEsImlhdCI6MTcyMjYyNzgyMX0.pfrZoCGhU-iugUIUSSrEyJfGk7zAEvffQAn0YeaBEAOqv1gk6jHHftVGfHqDpHgGMmHuNLaVmLBJ3AK_TqWjwldUBEUPG7CcSDsab9Ji5q_OisH1VhXA3pFpMQrt4uD2N6P6x1pfPGu8uaTvHzJMa0YpvWl2Ugmmwckizdw1nigemHRoyoRdaWiZtHdxB1GKi13y3dZIU0SoqqI46esDOP-A0pe4zI02oTVY37dM7PVkmWrcf87JWRuid9OkDLVhUNkC5tHLqR3hHDmaWz49QbvZq9KaS8E7dUyAbdl3b4ZdayBNL-wV4CUZP_UxeGOOowDU8dsG5mtKlHMOP8XY3w"
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder()
-            .addHeader("Authorization", token)
-            .build()
-
-        return chain.proceed(request)
+    private fun getDeviceFingerprint(context: Context): String {
+        val fingerprint = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        Log.d("Device fingerprint", fingerprint)
+        return fingerprint
     }
 }
+
+//private class AuthorizationInterceptor() : Interceptor {
+//    val context: Context = applicationContext
+//
+//    private val token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiZDY5NWYyNTYtMjFmMy00YmEwLTljNTItYmVjNzYyOTgxM2EyIiwiZW1haWwiOiJiYWJha2FwYTcyOUBnbWFpbC5jb20iLCJyb2xlX2lkIjoxLCJleHAiOjE3MjI3ODg4MjEsImlhdCI6MTcyMjY5ODgyMX0.SZjsA4xzn5xoLBJuPPGj6INNNlhMuJCh0CSMXffnn-jAOnWjr5J0IcXEu9tQ7HOe3jRCRZpL0aP5uZKBqMV2RNUcQ_pPBLoSsH5Ljmobw9TfezRQID27DcXnIMTXIV9N3SwpqyZAhwlm7jpZGqjrC_332h_CewCCQjV4d2dVOu5T9eyVZwxtzT0xkyT6oDoJt6pRsdUkaD3bzrAeMpo7c7iqzs1oscfozxSzlykXEsS6MZscPlfARm4-gB8wJN92pzWtvDpcWT6QLci3wsSn98D6czZwDrwNpf0_Vw2A9CFQTncs5RWa8AeJRsjA9-9Y3a0AB7vvDKCfPdxEkBaH-Q"
+//    override fun intercept(chain: Interceptor.Chain): Response {
+//        val request = chain.request().newBuilder()
+//            .addHeader("Authorization", token)
+//            .addHeader("fingerprint", getDeviceFingerprint(context))
+//            .build()
+//
+//        return chain.proceed(request)
+//    }
+//}

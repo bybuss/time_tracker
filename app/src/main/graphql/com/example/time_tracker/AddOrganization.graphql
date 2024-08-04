@@ -1,0 +1,10 @@
+mutation AddOrganization($name: String!, $description: String!) {
+    addOrganization(
+        data: {
+            name: $name,
+            description: $description
+        }
+    ) {
+        id
+    }
+}

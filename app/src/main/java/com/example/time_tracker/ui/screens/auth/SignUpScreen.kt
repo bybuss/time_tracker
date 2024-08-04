@@ -57,10 +57,10 @@ fun SignUpScreen() {
         rememberAccount = false,
         onTokenIdReceived = { tokenId ->
             user = getUserFromTokenId(tokenId = tokenId)
-            Log.d("MainActivity", "Received user: $user")
+            Log.d("SignUp", "Received user: $user")
         },
         onDialogDismissed = {
-            Log.d("MainActivity", "Dialog dismissed: $it")
+            Log.d("SignUp", "Dialog dismissed: $it")
         }
     )
 
