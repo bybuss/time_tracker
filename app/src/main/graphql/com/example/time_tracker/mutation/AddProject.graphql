@@ -1,0 +1,11 @@
+mutation AddProject($name: String!, $organizationId: Int!, $description: String!) {
+    addProject(
+        data: {
+            name: $name,
+            organizationId: $organizationId,
+            description: $description
+        }
+    ) {
+        id
+    }
+}

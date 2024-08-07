@@ -92,7 +92,7 @@ fun AddRoleTest(uiState: SignUpUiState, retryAction: () -> Unit) {
         }
 
         is SignUpUiState.Success -> {
-            Text(text = "${uiState.id}", modifier = Modifier.fillMaxSize())
+            Text(text = "${uiState.data}", modifier = Modifier.fillMaxSize())
         }
 
         is SignUpUiState.Error -> {

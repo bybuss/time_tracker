@@ -5,6 +5,7 @@ import android.provider.Settings
 import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.example.time_tracker.data.network.api.TimeTrackerRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 

@@ -1,0 +1,18 @@
+query GetFullTaskByAssignerId($assignerId: UUID!) {
+    getTask(
+        searchData: { assignerId: $assignerId }
+    ) {
+        id
+        name
+        description
+        isDone
+        addedAt
+        doneAt
+        assignerId
+        color
+        duration
+        difficulty
+        projectId
+        groupId
+    }
+}

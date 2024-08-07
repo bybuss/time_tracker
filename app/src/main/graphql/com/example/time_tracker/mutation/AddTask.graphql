@@ -1,0 +1,31 @@
+mutation AddTask(
+    $name: String!,
+    $description: String!,
+    $isDone: Boolean!,
+    $assignerId: UUID!,
+    $color: String!,
+    $duration: Duration!,
+    $endDate: datetime,
+    $difficulty: String!,
+    $projectId: Int!,
+    $groupId: Int,
+    $assignees: [JSON!]!
+) {
+    addTask(
+        data: {
+            name: $name
+            description: $description
+            isDone: $isDone
+            assignerId: $assignerId
+            color: $color
+            duration: $duration
+            endDate: $endDate
+            difficulty: $difficulty
+            projectId: $projectId
+            groupId: $groupId
+            assignees: $assignees
+        }
+    ) {
+        id
+    }
+}
