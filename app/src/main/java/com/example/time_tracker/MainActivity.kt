@@ -10,8 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.time_tracker.ui.navigation.AppNavigation
-import com.example.time_tracker.ui.screens.auth.AddRoleTestScreen
-import com.example.time_tracker.ui.screens.auth.SignUpScreen
+import com.example.time_tracker.ui.screens.auth.TestButtonsScreen
 import com.example.time_tracker.ui.theme.MobileAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +25,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //AppNavigation()
                     //SignUpScreen()
-                    AddRoleTestScreen()
+//                    AddRoleTestScreen()
+                    TestButtonsScreen()
                 }
             }
         }
