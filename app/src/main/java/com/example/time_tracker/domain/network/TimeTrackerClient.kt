@@ -3,7 +3,6 @@ package com.example.time_tracker.domain.network
 import com.example.time_tracker.domain.model.AccessToken
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
-import java.time.LocalDateTime
 import java.util.UUID
 
 /**
@@ -43,7 +42,7 @@ interface TimeTrackerClient { //Api
         assignees: List<Map<String, Any>>
     ): Int
 
-    suspend fun getFullTaskById(assignerId: UUID): FullTask?
+    suspend fun getFullTasksByAssignerId(assignerId: UUID): List<FullTask>
 
-    suspend fun getSimpleTaskByAssignerId(assignerId: UUID): SimpleTask?
+    suspend fun getSimpleTasksByAssignerId(assignerId: UUID): List<SimpleTask>
 }

@@ -1,4 +1,4 @@
-query GetFullTaskByAssignerId($assignerId: UUID!) {
+query GetFullTasksByAssignerId($assignerId: UUID!) {
     getTask(
         searchData: { assignerId: $assignerId }
     ) {

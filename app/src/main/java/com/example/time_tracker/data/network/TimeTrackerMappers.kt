@@ -1,7 +1,7 @@
 package com.example.time_tracker.data.network
 
-import com.example.time_tracker.GetFullTaskByAssignerIdQuery
-import com.example.time_tracker.GetSimpleTaskByAssignerIdQuery
+import com.example.time_tracker.GetFullTasksByAssignerIdQuery
+import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 
@@ -19,7 +19,7 @@ fun convertToJson(input: String): String {
         .replace("\":\"{", "\":{")
 }
 
-fun GetFullTaskByAssignerIdQuery.GetTask.toFulTask(): FullTask {
+fun GetFullTasksByAssignerIdQuery.GetTask.toFulTask(): FullTask {
     return FullTask(
         id = id!!,
         name = name!!,
@@ -36,12 +36,12 @@ fun GetFullTaskByAssignerIdQuery.GetTask.toFulTask(): FullTask {
     )
 }
 
-fun GetSimpleTaskByAssignerIdQuery.GetTask.toSimpleTask(): SimpleTask {
+fun GetSimpleTasksByAssignerIdQuery.GetTask.toSimpleTask(): SimpleTask {
     return SimpleTask(
         id = id!!,
         name = name!!,
         isDone = isDone!!,
         addedAt = addedAt.toString(),
-        doneAt = doneAt.toString() ?: ""
+        doneAt = doneAt.toString()
     )
 }

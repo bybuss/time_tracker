@@ -9,8 +9,8 @@ import com.example.time_tracker.AddRoleMutation
 import com.example.time_tracker.AddTaskMutation
 import com.example.time_tracker.AddUserMutation
 import com.example.time_tracker.AuthUserQuery
-import com.example.time_tracker.GetFullTaskByAssignerIdQuery
-import com.example.time_tracker.GetSimpleTaskByAssignerIdQuery
+import com.example.time_tracker.GetFullTasksByAssignerIdQuery
+import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
 import com.example.time_tracker.RefreshTokenQuery
 import com.example.time_tracker.data.network.convertToJson
 import com.example.time_tracker.data.network.toSimpleTask
@@ -164,23 +164,23 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
             ?: throw ApolloException("Failed to add task: No ID returned")
     }
 
-    override suspend fun getFullTaskById(assignerId: UUID): FullTask? {
-        val response = apolloClient.query(GetFullTaskByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getFullTasksByAssignerId(assignerId: UUID): List<FullTask> {
+        val response = apolloClient.query(GetFullTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) {
             throw ApolloException(response.errors?.firstOrNull()?.message)
         }
 
-        return response.data?.getTask?.firstOrNull()?.toFulTask()
+        return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
 
-    override suspend fun getSimpleTaskByAssignerId(assignerId: UUID): SimpleTask? {
-        val response = apolloClient.query(GetSimpleTaskByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getSimpleTasksByAssignerId(assignerId: UUID): List<SimpleTask> {
+        val response = apolloClient.query(GetSimpleTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) {
             throw ApolloException(response.errors?.firstOrNull()?.message)
         }
 
-        return response.data?.getTask?.firstOrNull()?.toSimpleTask()
+        return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
     }
 }

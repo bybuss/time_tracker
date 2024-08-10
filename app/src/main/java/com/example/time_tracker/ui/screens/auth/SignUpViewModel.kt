@@ -2,13 +2,10 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apollographql.apollo3.exception.ApolloException
 import com.example.time_tracker.data.network.api.TimeTrackerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import java.util.UUID
 
 /**
@@ -35,12 +32,6 @@ class SignUpViewModel(
                     name,
                     permissions
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -55,12 +46,6 @@ class SignUpViewModel(
                     email,
                     password
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -84,12 +69,6 @@ class SignUpViewModel(
                     email,
                     password
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -104,12 +83,6 @@ class SignUpViewModel(
                     name,
                     description
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -121,12 +94,6 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(timeTrackerRepository.refreshToken())
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -142,12 +109,6 @@ class SignUpViewModel(
                     organizationId,
                     description
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -183,46 +144,28 @@ class SignUpViewModel(
                     groupId,
                     assignees
                 ))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
         }
     }
 
-    suspend fun getFullTaskById(assignerId: UUID) {
+    suspend fun getFullTasksByAssignerId(assignerId: UUID) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getFullTaskById(assignerId))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
+                SignUpUiState.Success(timeTrackerRepository.getFullTasksByAssignerId(assignerId))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
         }
     }
 
-    suspend fun getSimpleTaskByAssignerId(assignerId: UUID) {
+    suspend fun getSimpleTasksByAssignerId(assignerId: UUID) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getSimpleTaskByAssignerId(assignerId))
-            } catch (e: IOException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: HttpException) {
-                SignUpUiState.Error(e.message.toString())
-            } catch (e: ApolloException) {
-                SignUpUiState.Error(e.message.toString())
+                SignUpUiState.Success(timeTrackerRepository.getSimpleTasksByAssignerId(assignerId))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
