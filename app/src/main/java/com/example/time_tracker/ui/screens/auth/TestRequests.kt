@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
 import java.util.UUID
 
@@ -44,7 +45,7 @@ fun TestButtonsScreen() {
     val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val uiState by signUpViewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val showDialog = remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val buttons = listOf(
         ButtonAction("Add Role") {
@@ -54,7 +55,7 @@ fun TestButtonsScreen() {
                     permissions = mapOf("insert" to true, "update" to true, "read" to true)
                 )
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Add User") {
             coroutineScope.launch {
@@ -66,7 +67,7 @@ fun TestButtonsScreen() {
                     password = "string"
                 )
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Add Organization") {
             coroutineScope.launch {
@@ -75,7 +76,7 @@ fun TestButtonsScreen() {
                     description = "description"
                 )
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Auth User") {
             coroutineScope.launch {
@@ -84,13 +85,13 @@ fun TestButtonsScreen() {
                     password = "string"
                 )
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Refresh Token") {
             coroutineScope.launch {
                 signUpViewModel.refreshToken()
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("addProject") {
             coroutineScope.launch {
@@ -100,27 +101,27 @@ fun TestButtonsScreen() {
                     organizationId = 1
                 )
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Get Full Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getFullTasksByAssignerId(UUID.fromString("96b3d5fd-523c-45e6-9002-66d50902bfc4"))
+                signUpViewModel.getFullTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Get Simple Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getSimpleTasksByAssignerId(UUID.fromString("96b3d5fd-523c-45e6-9002-66d50902bfc4"))
+                signUpViewModel.getSimpleTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
             }
-            showDialog.value = true
+            showDialog = true
         },
         ButtonAction("Add Task") {
             coroutineScope.launch {
                 signUpViewModel.addTask(
-                    name = "zalupa2",
+                    name = "zalupa",
                     description = "slona",
                     isDone = false,
-                    assignerId = UUID.fromString("96b3d5fd-523c-45e6-9002-66d50902bfc4"),
+                    assignerId = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
                     color = "#FF1A1A",
                     duration = 720012,
                     endDate = null,
@@ -129,13 +130,33 @@ fun TestButtonsScreen() {
                     groupId = null,
                     assignees = listOf(
                         mapOf(
-                            "id" to UUID.fromString("96b3d5fd-523c-45e6-9002-66d50902bfc4"),
+                            "id" to "96b3d5fd-523c-45e6-9002-66d50902bfc4",
                             "organizationId" to 1
                         )
                     )
                 )
             }
-            showDialog.value = true
+            showDialog = true
+        },
+        ButtonAction("Request Change Password") {
+            coroutineScope.launch {
+                signUpViewModel.requestChangePassword(
+                    id = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                    firstName = "eblo",
+                    lastName ="slona",
+                    email = "babakapa729@gmail.com",
+                )
+            }
+            showDialog = true
+        },
+        ButtonAction("Change Password") {
+            coroutineScope.launch {
+                signUpViewModel.changePassword(
+                    newPassword = "string2",
+                    changePasswordToken = "cKxqJsCLgkgfBkl_JJAsPyvwI9QePaTNX_rsJGq4zJI"
+                )
+            }
+            showDialog = true
         }
     )
 
@@ -151,8 +172,8 @@ fun TestButtonsScreen() {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        if (showDialog.value) {
-            HandleUiState(uiState) { showDialog.value = false }
+        if (showDialog) {
+            HandleUiState(uiState) { showDialog = false }
         }
     }
 }

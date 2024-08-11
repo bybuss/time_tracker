@@ -12,6 +12,8 @@ import com.example.time_tracker.AuthUserQuery
 import com.example.time_tracker.GetFullTasksByAssignerIdQuery
 import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
 import com.example.time_tracker.RefreshTokenQuery
+import com.example.time_tracker.RequestChangePasswordQuery
+import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.data.network.convertToJson
 import com.example.time_tracker.data.network.toSimpleTask
 import com.example.time_tracker.data.network.toFulTask
@@ -21,7 +23,7 @@ import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import com.example.time_tracker.domain.network.TimeTrackerClient
 import kotlinx.serialization.json.Json
-import java.util.UUID
+import okhttp3.internal.closeQuietly
 
 /**
  * @author bybuss
@@ -131,7 +133,7 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
         name: String,
         description: String,
         isDone: Boolean,
-        assignerId: UUID,
+        assignerId: String,
         color: String,
         duration: Int,
         endDate: String?,
@@ -164,7 +166,7 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
             ?: throw ApolloException("Failed to add task: No ID returned")
     }
 
-    override suspend fun getFullTasksByAssignerId(assignerId: UUID): List<FullTask> {
+    override suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask> {
         val response = apolloClient.query(GetFullTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) {
@@ -174,7 +176,7 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
         return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
 
-    override suspend fun getSimpleTasksByAssignerId(assignerId: UUID): List<SimpleTask> {
+    override suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
         val response = apolloClient.query(GetSimpleTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) {
@@ -182,5 +184,35 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
         }
 
         return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
+    }
+
+    override suspend fun requestChangePassword(
+        id: String,
+        firstName: String,
+        lastName: String,
+        email: String
+    ): Boolean {
+        val response = apolloClient.query(RequestChangePasswordQuery(
+            id,
+            firstName,
+            lastName,
+            email
+        )).execute()
+
+        if (response.hasErrors()) {
+            throw ApolloException(response.errors?.firstOrNull()?.message)
+        }
+
+        return response.data?.requestChangePassword ?: false
+    }
+
+    override suspend fun changePassword(newPassword: String, changePasswordToken: String): Boolean {
+        val response = apolloClient.mutation(ChangePasswordMutation(newPassword, changePasswordToken)).execute()
+
+        if (response.hasErrors()) {
+            throw ApolloException(response.errors?.firstOrNull()?.message)
+        }
+
+        return response.data?.changePassword ?: false
     }
 }

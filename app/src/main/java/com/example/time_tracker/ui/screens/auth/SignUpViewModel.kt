@@ -119,7 +119,7 @@ class SignUpViewModel(
         name: String,
         description: String,
         isDone: Boolean,
-        assignerId: UUID,
+        assignerId: String,
         color: String,
         duration: Int,
         endDate: String?,
@@ -150,7 +150,7 @@ class SignUpViewModel(
         }
     }
 
-    suspend fun getFullTasksByAssignerId(assignerId: UUID) {
+    suspend fun getFullTasksByAssignerId(assignerId: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
@@ -161,11 +161,43 @@ class SignUpViewModel(
         }
     }
 
-    suspend fun getSimpleTasksByAssignerId(assignerId: UUID) {
+    suspend fun getSimpleTasksByAssignerId(assignerId: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(timeTrackerRepository.getSimpleTasksByAssignerId(assignerId))
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    suspend fun requestChangePassword(
+        id: String,
+        firstName: String,
+        lastName: String,
+        email: String
+    ) {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(timeTrackerRepository.requestChangePassword(
+                    id,
+                    firstName,
+                    lastName,
+                    email
+                ))
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    suspend fun changePassword(newPassword: String, changePasswordToken: String) {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(timeTrackerRepository.changePassword(newPassword, changePasswordToken))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }

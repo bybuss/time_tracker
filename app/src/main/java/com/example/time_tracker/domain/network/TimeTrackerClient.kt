@@ -32,7 +32,7 @@ interface TimeTrackerClient { //Api
         name: String,
         description: String,
         isDone: Boolean,
-        assignerId: UUID,
+        assignerId: String,
         color: String,
         duration: Int,
         endDate: String?,
@@ -42,7 +42,16 @@ interface TimeTrackerClient { //Api
         assignees: List<Map<String, Any>>
     ): Int
 
-    suspend fun getFullTasksByAssignerId(assignerId: UUID): List<FullTask>
+    suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask>
 
-    suspend fun getSimpleTasksByAssignerId(assignerId: UUID): List<SimpleTask>
+    suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask>
+
+    suspend fun requestChangePassword(
+        id: String,
+        firstName: String,
+        lastName: String,
+        email: String
+    ): Boolean
+
+    suspend fun changePassword(newPassword: String, changePasswordToken: String): Boolean
 }
