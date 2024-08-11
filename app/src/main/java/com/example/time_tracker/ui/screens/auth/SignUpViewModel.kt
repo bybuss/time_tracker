@@ -23,6 +23,12 @@ class SignUpViewModel(
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
+    var token: String? = null
+        private set
+
+    fun setToken(responseToken: String) {
+        token = responseToken
+    }
 
     suspend fun addRole(name: String, permissions: Map<String, Boolean>) {
         viewModelScope.launch {
@@ -193,14 +199,16 @@ class SignUpViewModel(
         }
     }
 
-    suspend fun changePassword(newPassword: String, changePasswordToken: String) {
-        viewModelScope.launch {
-            _uiState.value = SignUpUiState.Loading
-            _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.changePassword(newPassword, changePasswordToken))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
+    suspend fun changePassword(newPassword: String) {
+        token?.let {
+            viewModelScope.launch {
+                _uiState.value = SignUpUiState.Loading
+                _uiState.value = try {
+                    SignUpUiState.Success(timeTrackerRepository.changePassword(newPassword, it))
+                } catch (e: Exception) {
+                    SignUpUiState.Error(e.message.toString())
+                }
             }
-        }
+        } ?: SignUpUiState.Error("Token is null")
     }
 }

@@ -152,8 +152,7 @@ fun TestButtonsScreen() {
         ButtonAction("Change Password") {
             coroutineScope.launch {
                 signUpViewModel.changePassword(
-                    newPassword = "string2",
-                    changePasswordToken = "cKxqJsCLgkgfBkl_JJAsPyvwI9QePaTNX_rsJGq4zJI"
+                    newPassword = "string3",
                 )
             }
             showDialog = true

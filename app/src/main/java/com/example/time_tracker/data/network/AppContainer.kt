@@ -53,7 +53,7 @@ class AppContainerImpl(private val context: Context): AppContainer {
 //private class AuthorizationInterceptor() : Interceptor {
 //    val context: Context = applicationContext
 //
-//    private val token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiZDY5NWYyNTYtMjFmMy00YmEwLTljNTItYmVjNzYyOTgxM2EyIiwiZW1haWwiOiJiYWJha2FwYTcyOUBnbWFpbC5jb20iLCJyb2xlX2lkIjoxLCJleHAiOjE3MjI3ODg4MjEsImlhdCI6MTcyMjY5ODgyMX0.SZjsA4xzn5xoLBJuPPGj6INNNlhMuJCh0CSMXffnn-jAOnWjr5J0IcXEu9tQ7HOe3jRCRZpL0aP5uZKBqMV2RNUcQ_pPBLoSsH5Ljmobw9TfezRQID27DcXnIMTXIV9N3SwpqyZAhwlm7jpZGqjrC_332h_CewCCQjV4d2dVOu5T9eyVZwxtzT0xkyT6oDoJt6pRsdUkaD3bzrAeMpo7c7iqzs1oscfozxSzlykXEsS6MZscPlfARm4-gB8wJN92pzWtvDpcWT6QLci3wsSn98D6czZwDrwNpf0_Vw2A9CFQTncs5RWa8AeJRsjA9-9Y3a0AB7vvDKCfPdxEkBaH-Q"
+//    private val token = "TOKEN"
 //    override fun intercept(chain: Interceptor.Chain): Response {
 //        val request = chain.request().newBuilder()
 //            .addHeader("Authorization", token)
