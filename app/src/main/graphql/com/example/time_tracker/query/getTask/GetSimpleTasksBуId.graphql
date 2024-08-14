@@ -1,0 +1,11 @@
+query GetSimpleTasksById($id: Int!) {
+    getTask(
+        searchData: { id: $id }
+    ) {
+        id
+        name
+        isDone
+        addedAt
+        doneAt
+    }
+}

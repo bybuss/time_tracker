@@ -44,7 +44,11 @@ interface TimeTrackerClient { //Api
 
     suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask>
 
+    suspend fun getFullTasksById(id: Int): List<FullTask>
+
     suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask>
+
+    suspend fun getSimpleTasksById(id: Int): List<SimpleTask>
 
     suspend fun requestChangePassword(
         id: String,

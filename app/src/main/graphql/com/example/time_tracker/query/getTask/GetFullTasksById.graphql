@@ -1,0 +1,18 @@
+query GetFullTasksById($id: Int!) {
+    getTask(
+        searchData: { id: $id }
+    ) {
+        id
+        name
+        description
+        isDone
+        addedAt
+        doneAt
+        assignerId
+        color
+        duration
+        difficulty
+        projectId
+        groupId
+    }
+}

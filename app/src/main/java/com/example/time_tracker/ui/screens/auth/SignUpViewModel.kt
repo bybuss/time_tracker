@@ -167,11 +167,33 @@ class SignUpViewModel(
         }
     }
 
+    suspend fun getFullTasksById(id: Int) {
+        viewModelScope.launch{
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(timeTrackerRepository.getFullTasksById(id))
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
     suspend fun getSimpleTasksByAssignerId(assignerId: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(timeTrackerRepository.getSimpleTasksByAssignerId(assignerId))
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    suspend fun getSimpleTasksById(id: Int) {
+        viewModelScope.launch{
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(timeTrackerRepository.getSimpleTasksById(id))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -209,6 +231,6 @@ class SignUpViewModel(
                     SignUpUiState.Error(e.message.toString())
                 }
             }
-        } ?: SignUpUiState.Error("Token is null")
+        } ?: SignUpUiState.Error("Попробуйте снова перейти по ссылке в письме на вашей почте!")
     }
 }

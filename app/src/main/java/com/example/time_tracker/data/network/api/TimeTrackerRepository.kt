@@ -14,6 +14,8 @@ import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
 import com.example.time_tracker.RefreshTokenQuery
 import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
+import com.example.time_tracker.GetFullTasksByIdQuery
+import com.example.time_tracker.GetSimpleTasksByIdQuery
 import com.example.time_tracker.data.network.convertToJson
 import com.example.time_tracker.data.network.toSimpleTask
 import com.example.time_tracker.data.network.toFulTask
@@ -23,7 +25,6 @@ import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import com.example.time_tracker.domain.network.TimeTrackerClient
 import kotlinx.serialization.json.Json
-import okhttp3.internal.closeQuietly
 
 /**
  * @author bybuss
@@ -176,6 +177,16 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
         return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
 
+    override suspend fun getFullTasksById(id: Int): List<FullTask> {
+        val response = apolloClient.query(GetFullTasksByIdQuery(id)).execute()
+
+        if (response.hasErrors()) {
+            throw ApolloException(response.errors?.firstOrNull()?.message)
+        }
+
+        return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
+    }
+
     override suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
         val response = apolloClient.query(GetSimpleTasksByAssignerIdQuery(assignerId)).execute()
 
@@ -184,6 +195,16 @@ class TimeTrackerRepository(private val apolloClient: ApolloClient): TimeTracker
         }
 
         return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
+    }
+
+    override suspend fun getSimpleTasksById(id: Int): List<SimpleTask> {
+        val response = apolloClient.query(GetSimpleTasksByIdQuery(id)).execute()
+
+        if (response.hasErrors()) {
+            throw ApolloException(response.errors?.firstOrNull()?.message)
+        }
+
+        return response.data?.getTask?. map { it.toSimpleTask() } ?: emptyList()
     }
 
     override suspend fun requestChangePassword(
