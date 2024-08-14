@@ -2,11 +2,11 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.time_tracker.data.network.api.TimeTrackerRepository
+import com.example.time_tracker.data.network.TimeTrackerRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 /**
  * @author bybuss
@@ -58,6 +58,18 @@ class SignUpViewModel(
         }
     }
 
+    suspend fun refreshToken() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                delay(500)
+                SignUpUiState.Success(timeTrackerRepository.refreshToken())
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
     suspend fun addUser(
         firstName: String,
         lastName: String,
@@ -89,17 +101,6 @@ class SignUpViewModel(
                     name,
                     description
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
-        }
-    }
-
-    suspend fun refreshToken() {
-        viewModelScope.launch {
-            _uiState.value = SignUpUiState.Loading
-            _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.refreshToken())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
