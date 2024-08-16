@@ -7,25 +7,22 @@ import okhttp3.Response
 /**
  * @author bybuss
  */
-class SetCookieInterceptor (
+class AddRefreshTokenInterceptor (
     private val tokenManager: TokenManager
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
         if (request.header("X-Refresh-Token-Request") == "true") {
-            val response = chain.proceed(chain.request())
+            val refreshToken = tokenManager.getRefreshToken()
 
-            val setCookieHeaders = response.headers("Set-Cookie")
-            var refreshToken: String = ""
+            if (refreshToken.isNotEmpty()) {
+                val newRequest = request.newBuilder()
+                    .addHeader("Cookie", refreshToken)
+                    .build()
 
-            setCookieHeaders.forEach { header ->
-                if (header.startsWith("refreshToken")) { refreshToken = header }
+                return chain.proceed(newRequest)
             }
-
-            refreshToken.let { tokenManager.updateRefreshToken(it) }
-
-            return response
         }
 
         return chain.proceed(request)

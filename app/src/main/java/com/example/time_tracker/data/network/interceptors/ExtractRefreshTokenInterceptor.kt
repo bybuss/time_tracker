@@ -7,24 +7,25 @@ import okhttp3.Response
 /**
  * @author bybuss
  */
-class RefreshTokenInterceptor (
+class ExtractRefreshTokenInterceptor (
     private val tokenManager: TokenManager
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
         if (request.header("X-Refresh-Token-Request") == "true") {
-            val buffer = okio.Buffer()
-            request.body?.writeTo(buffer)
-            val requestBodyStr = buffer.readUtf8()
+            val response = chain.proceed(chain.request())
 
-            if (requestBodyStr.contains("RefreshTokenQuery")) {
-                val refreshToken = tokenManager.getRefreshToken()
-                val newRequest = request.newBuilder()
-                    .addHeader("Cookie", refreshToken)
-                    .build()
-                return chain.proceed(newRequest)
+            val setCookieHeaders = response.headers("Set-Cookie")
+            var refreshToken: String = ""
+
+            setCookieHeaders.forEach { header ->
+                if (header.startsWith("refreshToken")) { refreshToken = header }
             }
+
+            refreshToken.let { tokenManager.updateRefreshToken(it) }
+
+            return response
         }
 
         return chain.proceed(request)

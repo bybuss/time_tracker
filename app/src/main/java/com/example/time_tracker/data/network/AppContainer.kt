@@ -5,8 +5,8 @@ import android.provider.Settings
 import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
-import com.example.time_tracker.data.network.interceptors.RefreshTokenInterceptor
-import com.example.time_tracker.data.network.interceptors.SetCookieInterceptor
+import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
+import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
@@ -26,8 +26,8 @@ class AppContainerImpl(private val context: Context): AppContainer {
 //        .addInterceptor(AuthorizationInterceptor())
 //        .build()
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(SetCookieInterceptor(tokenManager)) // Сохраняем refresh token
-        .addInterceptor(RefreshTokenInterceptor(tokenManager)) // Добавляем его к запросу refreshToken
+        .addInterceptor(ExtractRefreshTokenInterceptor(tokenManager))
+        .addInterceptor(AddRefreshTokenInterceptor(tokenManager))
         .addInterceptor(Interceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", tokenManager.getAccessToken())
