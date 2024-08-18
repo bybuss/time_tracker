@@ -2,7 +2,7 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.time_tracker.data.network.TimeTrackerRepository
+import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +19,7 @@ sealed interface SignUpUiState {
 }
 
 class SignUpViewModel(
-    private val timeTrackerRepository: TimeTrackerRepository
+    private val graphQLRepository: GraphQLRepository
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -34,7 +34,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.addRole(
+                SignUpUiState.Success(graphQLRepository.addRole(
                     name,
                     permissions
                 ))
@@ -48,7 +48,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.authUser(
+                SignUpUiState.Success(graphQLRepository.authUser(
                     email,
                     password
                 ))
@@ -63,7 +63,7 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 delay(500)
-                SignUpUiState.Success(timeTrackerRepository.refreshToken())
+                SignUpUiState.Success(graphQLRepository.refreshToken())
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -80,7 +80,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.addUser(
+                SignUpUiState.Success(graphQLRepository.addUser(
                     firstName,
                     lastName,
                     roleId,
@@ -97,7 +97,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.addOrganization(
+                SignUpUiState.Success(graphQLRepository.addOrganization(
                     name,
                     description
                 ))
@@ -111,7 +111,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.addProject(
+                SignUpUiState.Success(graphQLRepository.addProject(
                     name,
                     organizationId,
                     description
@@ -138,7 +138,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.addTask(
+                SignUpUiState.Success(graphQLRepository.addTask(
                     name,
                     description,
                     isDone,
@@ -161,7 +161,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getFullTasksByAssignerId(assignerId))
+                SignUpUiState.Success(graphQLRepository.getFullTasksByAssignerId(assignerId))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -172,7 +172,7 @@ class SignUpViewModel(
         viewModelScope.launch{
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getFullTasksById(id))
+                SignUpUiState.Success(graphQLRepository.getFullTasksById(id))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -183,7 +183,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getSimpleTasksByAssignerId(assignerId))
+                SignUpUiState.Success(graphQLRepository.getSimpleTasksByAssignerId(assignerId))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -194,7 +194,7 @@ class SignUpViewModel(
         viewModelScope.launch{
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.getSimpleTasksById(id))
+                SignUpUiState.Success(graphQLRepository.getSimpleTasksById(id))
             } catch (e: Exception) {
                 SignUpUiState.Error(e.message.toString())
             }
@@ -210,7 +210,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(timeTrackerRepository.requestChangePassword(
+                SignUpUiState.Success(graphQLRepository.requestChangePassword(
                     id,
                     firstName,
                     lastName,
@@ -227,7 +227,7 @@ class SignUpViewModel(
             viewModelScope.launch {
                 _uiState.value = SignUpUiState.Loading
                 _uiState.value = try {
-                    SignUpUiState.Success(timeTrackerRepository.changePassword(newPassword, it))
+                    SignUpUiState.Success(graphQLRepository.changePassword(newPassword, it))
                 } catch (e: Exception) {
                     SignUpUiState.Error(e.message.toString())
                 }

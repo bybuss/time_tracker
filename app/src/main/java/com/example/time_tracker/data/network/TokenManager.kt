@@ -6,7 +6,7 @@ import android.util.Log
  * @author bybuss
  */
 
-// TODO: ЗАМЕНИТЬ ПОТОМ TokenManager НА БД
+// TODO: УБРАТЬ ПОТОМ TokenManager
 class TokenManager {
     @Volatile private var accessToken: String = ""
     @Volatile private var refreshToken: String = ""

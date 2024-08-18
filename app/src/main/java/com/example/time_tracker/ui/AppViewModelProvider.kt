@@ -15,7 +15,7 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             SignUpViewModel(
-                timeTrackerApplication().container.timeTrackerRepository
+                timeTrackerApplication().container.graphQLRepository
             )
         }
 

@@ -1,8 +1,8 @@
 package com.example.time_tracker
 
 import android.app.Application
-import com.example.time_tracker.data.network.AppContainer
-import com.example.time_tracker.data.network.AppContainerImpl
+import com.example.time_tracker.data.AppContainer
+import com.example.time_tracker.data.AppContainerImpl
 
 /**
  * @author bybuss
