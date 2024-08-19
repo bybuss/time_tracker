@@ -13,7 +13,6 @@ interface TokenStore {
     fun getAccessTokenExpiresTime(): String
     fun getAccessTokenCreatedTime(): String
 
-
     suspend fun saveRefreshToken(refreshToken: String)
     fun getRefreshToken(): Flow<String>
 

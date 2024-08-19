@@ -32,14 +32,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
-import java.util.UUID
+import com.example.time_tracker.domain.model.AdminRole
+import com.example.time_tracker.domain.model.ButtonAction
+import kotlinx.coroutines.Dispatchers
 
 /**
  * @author bybuss
  */
-
-data class ButtonAction(val label: String, val action: () -> Unit)
-
 @Composable
 fun TestButtonsScreen() {
     val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -51,8 +50,8 @@ fun TestButtonsScreen() {
         ButtonAction("Add Role") {
             coroutineScope.launch {
                 signUpViewModel.addRole(
-                    name = "member",
-                    permissions = mapOf("insert" to true, "update" to true, "read" to true)
+                    name = AdminRole.name,
+                    permissions = AdminRole.permissions
                 )
             }
             showDialog = true

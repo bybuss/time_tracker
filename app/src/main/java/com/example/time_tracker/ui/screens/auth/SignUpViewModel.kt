@@ -30,7 +30,7 @@ class SignUpViewModel(
         token = responseToken
     }
 
-    suspend fun addRole(name: String, permissions: Map<String, Boolean>) {
+    suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {

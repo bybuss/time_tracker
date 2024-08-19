@@ -30,8 +30,7 @@ class GraphQLRepository(
     private val apolloClient: ApolloClient,
     private val tokenStoreRepository: TokenStoreRepository
 ): GraphQLClient {
-
-    override suspend fun addRole(name: String, permissions: Map<String, Boolean>): Int {
+    override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
 
         if (response.hasErrors()) {

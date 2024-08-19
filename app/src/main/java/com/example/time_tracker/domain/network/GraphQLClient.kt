@@ -9,7 +9,7 @@ import com.example.time_tracker.domain.model.SimpleTask
  */
 interface GraphQLClient {
 
-    suspend fun addRole(name: String, permissions: Map<String, Boolean>): Int
+    suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int
 
     suspend fun addOrganization(name: String, description: String): Int
 
