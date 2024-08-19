@@ -2,13 +2,14 @@ package com.example.time_tracker.data
 
 import android.content.Context
 import android.provider.Settings
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.data.network.GraphQLRepository
 import com.example.time_tracker.data.network.TokenStoreRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
 import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -24,6 +25,7 @@ interface AppContainer {
 }
 
 class AppContainerImpl(private val context: Context): AppContainer {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val baseUrl = "http://31.128.45.95:8000/graphql"
     override val tokenStoreRepository: TokenStoreRepository by lazy {
         TokenStoreRepository(context)
@@ -33,7 +35,7 @@ class AppContainerImpl(private val context: Context): AppContainer {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(ExtractRefreshTokenInterceptor(tokenStoreRepository))
+        .addInterceptor(ExtractRefreshTokenInterceptor(tokenStoreRepository, coroutineScope))
         .addInterceptor(AddRefreshTokenInterceptor(tokenStoreRepository))
         .addInterceptor(Interceptor { chain ->
             val request = chain.request().newBuilder()
@@ -55,7 +57,6 @@ class AppContainerImpl(private val context: Context): AppContainer {
 
     private fun getDeviceFingerprint(context: Context): String {
         val fingerprint = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        Log.d("Device fingerprint", fingerprint)
         return fingerprint
     }
 }

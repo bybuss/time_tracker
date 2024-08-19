@@ -1,6 +1,5 @@
 package com.example.time_tracker.data.network.interceptors
 
-import android.util.Log
 import com.example.time_tracker.data.network.TokenStoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

@@ -1,6 +1,5 @@
 package com.example.time_tracker.data.network
 
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
@@ -22,7 +21,6 @@ import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import com.example.time_tracker.domain.network.GraphQLClient
-import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 /**
@@ -78,7 +76,7 @@ class GraphQLRepository(
             ?: throw ApolloException("Failed to add user: No ID returned")
         ).toString()
     }
-
+// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
     override suspend fun authUser(email: String, password: String): AccessToken {
         val response = apolloClient.query(AuthUserQuery(email, password))
             .addHttpHeader("Access-Token-Request", "true")
@@ -93,16 +91,23 @@ class GraphQLRepository(
         ).toString())
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
-        tokenStoreRepository.saveAccessToken(accessToken.token)
-        Log.d("TokenStoreRepository", "accessToken saved from auth user: ${tokenStoreRepository.getAccessToken().first()}")
 
+        tokenStoreRepository.saveAccessToken(accessToken.token)
+        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
+        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.createdAt)
+
+        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
+            throw ApolloException("Токен не был получен!")
+        }
+
+// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ, ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,
             createdAt = accessToken.createdAt
         )
     }
-
+// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
     override suspend fun refreshToken(): AccessToken {
         val response = apolloClient.query(RefreshTokenQuery())
             .addHttpHeader("Refresh-Token-Request", "true")
@@ -117,9 +122,16 @@ class GraphQLRepository(
         ).toString())
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
-        tokenStoreRepository.saveAccessToken(accessToken.token)
-        Log.d("TokenStoreRepository", "accessToken saved from refresh token: ${tokenStoreRepository.getAccessToken().first()}")
 
+        tokenStoreRepository.saveAccessToken(accessToken.token)
+        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
+        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.createdAt)
+
+        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
+            throw ApolloException("Токен не был получен!")
+        }
+
+// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ, ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,

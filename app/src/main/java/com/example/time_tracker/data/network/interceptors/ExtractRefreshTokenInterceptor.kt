@@ -1,8 +1,7 @@
 package com.example.time_tracker.data.network.interceptors
 
-import android.util.Log
 import com.example.time_tracker.data.network.TokenStoreRepository
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -11,7 +10,8 @@ import okhttp3.Response
  * @author bybuss
  */
 class ExtractRefreshTokenInterceptor (
-    private val tokenStoreRepository: TokenStoreRepository
+    private val tokenStoreRepository: TokenStoreRepository,
+    private val coroutineScope: CoroutineScope
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -24,13 +24,11 @@ class ExtractRefreshTokenInterceptor (
 
             setCookieHeaders.forEach { header ->
                 if (header.startsWith("refreshToken")) { refreshToken = header }
-                Log.d("Interceptor", "Come refresh token: $header")
             }
 
             refreshToken.let {
-                GlobalScope.launch {
+                coroutineScope.launch {
                     tokenStoreRepository.saveRefreshToken(it)
-                    Log.d("Interceptor", "Saving refresh token: $it")
                 }
             }
 
