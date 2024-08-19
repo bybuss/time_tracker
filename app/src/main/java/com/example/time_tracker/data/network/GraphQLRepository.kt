@@ -22,6 +22,7 @@ import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import com.example.time_tracker.domain.network.GraphQLClient
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 /**
@@ -80,7 +81,7 @@ class GraphQLRepository(
 
     override suspend fun authUser(email: String, password: String): AccessToken {
         val response = apolloClient.query(AuthUserQuery(email, password))
-            .addHttpHeader("X-Refresh-Token-Request", "true")
+            .addHttpHeader("Access-Token-Request", "true")
             .execute()
 
         if (response.hasErrors()) {
@@ -93,6 +94,7 @@ class GraphQLRepository(
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
         tokenStoreRepository.saveAccessToken(accessToken.token)
+        Log.d("TokenStoreRepository", "accessToken saved from auth user: ${tokenStoreRepository.getAccessToken().first()}")
 
         return AccessToken(
             token = accessToken.token,
@@ -103,7 +105,7 @@ class GraphQLRepository(
 
     override suspend fun refreshToken(): AccessToken {
         val response = apolloClient.query(RefreshTokenQuery())
-            .addHttpHeader("X-Refresh-Token-Request", "true")
+            .addHttpHeader("Refresh-Token-Request", "true")
             .execute()
 
         if (response.hasErrors()) {
@@ -116,6 +118,7 @@ class GraphQLRepository(
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
         tokenStoreRepository.saveAccessToken(accessToken.token)
+        Log.d("TokenStoreRepository", "accessToken saved from refresh token: ${tokenStoreRepository.getAccessToken().first()}")
 
         return AccessToken(
             token = accessToken.token,

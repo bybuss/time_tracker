@@ -1,7 +1,6 @@
 package com.example.time_tracker.data.network.interceptors
 
 import android.util.Log
-import com.example.time_tracker.data.network.TokenManager
 import com.example.time_tracker.data.network.TokenStoreRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,7 +16,7 @@ class ExtractRefreshTokenInterceptor (
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
-        if (request.header("X-Refresh-Token-Request") == "true") {
+        if (request.header("Access-Token-Request") == "true") {
             val response = chain.proceed(chain.request())
 
             val setCookieHeaders = response.headers("Set-Cookie")

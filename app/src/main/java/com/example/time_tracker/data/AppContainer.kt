@@ -6,10 +6,11 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.data.network.GraphQLRepository
-import com.example.time_tracker.data.network.TokenManager
 import com.example.time_tracker.data.network.TokenStoreRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
 import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
@@ -27,13 +28,16 @@ class AppContainerImpl(private val context: Context): AppContainer {
     override val tokenStoreRepository: TokenStoreRepository by lazy {
         TokenStoreRepository(context)
     }
+    private val accessToken = runBlocking {
+        tokenStoreRepository.getAccessToken().first()
+    }
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(ExtractRefreshTokenInterceptor(tokenStoreRepository))
         .addInterceptor(AddRefreshTokenInterceptor(tokenStoreRepository))
         .addInterceptor(Interceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", tokenStoreRepository.getAccessToken().toString())
+                .addHeader("Authorization", accessToken)
                 .addHeader("fingerprint", getDeviceFingerprint(context))
                 .build()
             chain.proceed(request)
