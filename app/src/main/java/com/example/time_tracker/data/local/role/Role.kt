@@ -1,4 +1,4 @@
-package com.example.time_tracker.data.local.entities
+package com.example.time_tracker.data.local.role
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

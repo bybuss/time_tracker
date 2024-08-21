@@ -1,8 +1,11 @@
-package com.example.time_tracker.data.local.entities
+package com.example.time_tracker.data.local.task
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.time_tracker.data.local.user.User
+import com.example.time_tracker.data.local.group.Group
+import com.example.time_tracker.data.local.project.Project
 
 /**
  * @author bybuss

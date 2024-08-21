@@ -1,8 +1,10 @@
-package com.example.time_tracker.data.local.entities
+package com.example.time_tracker.data.local.user_org
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.time_tracker.data.local.organization.Organization
+import com.example.time_tracker.data.local.user.User
 
 /**
  * @author bybuss
