@@ -7,20 +7,20 @@ import androidx.room.PrimaryKey
 /**
  * @author bybuss
  */
-@Entity(tableName = "users_tasks", foreignKeys = [
-    ForeignKey(
-        entity = Task::class, parentColumns = ["id"], childColumns = ["taskId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    ),
+@Entity(tableName = "user_org", foreignKeys = [
     ForeignKey(
         entity = User::class, parentColumns = ["id"], childColumns = ["userId"],
         onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+    ),
+    ForeignKey(
+        entity = Organization::class, parentColumns = ["id"], childColumns = ["orgId"],
+        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
     )
 ])
-data class UserTask(
+data class UserOrg(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val githubData: String,
-    val taskId: Int,
     val userId: Int,
-    val isEmployee: Boolean = false
+    val orgId: Int,
+    val position: String,
+    val permissions: Map<String, Map<String, Boolean>>
 )

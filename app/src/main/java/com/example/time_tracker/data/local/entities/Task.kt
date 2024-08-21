@@ -18,14 +18,14 @@ import androidx.room.PrimaryKey
         entity = User::class, parentColumns = ["id"], childColumns = ["assignerId"],
         onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
     ),
-//    ForeignKey(
-//        entity = Project::class, parentColumns = ["id"], childColumns = ["projectId"],
-//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-//    ),
-//    ForeignKey(
-//        entity = Group::class, parentColumns = ["id"], childColumns = ["groupId"],
-//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-//    )
+    ForeignKey(
+        entity = Project::class, parentColumns = ["id"], childColumns = ["projectId"],
+        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+    ),
+    ForeignKey(
+        entity = Group::class, parentColumns = ["id"], childColumns = ["groupId"],
+        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+    )
 ])
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -39,6 +39,6 @@ data class Task(
     val duration: Int,
     val color: String,
     val difficulty: String,
-    val projectId: Int? = null, // @ForeignKey() на Project
-    val groupId: Int? = null // @ForeignKey() на Group
+    val projectId: Int? = null,
+    val groupId: Int? = null
 )
