@@ -16,6 +16,8 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTasksByIdQuery
 import com.example.time_tracker.GetSimpleTasksByIdQuery
+import com.example.time_tracker.data.local.task.Task
+import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.domain.model.AccessToken
 import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
@@ -28,14 +30,13 @@ import kotlinx.serialization.json.Json
  */
 class GraphQLRepository(
     private val apolloClient: ApolloClient,
-    private val tokenStoreRepository: TokenStoreRepository
+    private val tokenStoreRepository: TokenStoreRepository,
+    private val taskRepository: TaskRepository
 ): GraphQLClient {
     override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.addRole?.id
             ?: throw ApolloException("Failed to add role: No ID returned")
@@ -44,9 +45,7 @@ class GraphQLRepository(
     override suspend fun addOrganization(name: String, description: String): Int {
         val response = apolloClient.mutation(AddOrganizationMutation(name, description)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.addOrganization?.id
             ?: throw ApolloException("Failed to add organization: No ID returned")
@@ -67,23 +66,20 @@ class GraphQLRepository(
             password
         )).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return (response.data?.addUser?.id
             ?: throw ApolloException("Failed to add user: No ID returned")
         ).toString()
     }
-// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
+// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА
+//  НЕ НУЖНА
     override suspend fun authUser(email: String, password: String): AccessToken {
         val response = apolloClient.query(AuthUserQuery(email, password))
             .addHttpHeader("Access-Token-Request", "true")
             .execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         val responseJson = convertToJson((
                 response.data?.authUser ?: throw ApolloException("User not found")
@@ -95,26 +91,25 @@ class GraphQLRepository(
         tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
         tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.createdAt)
 
-        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
+        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty())
             throw ApolloException("Токен не был получен!")
-        }
 
-// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ, ОТЛАДКА НЕ НУЖНА
+// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ,
+//  ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,
             createdAt = accessToken.createdAt
         )
     }
-// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
+// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА
+//  НЕ НУЖНА
     override suspend fun refreshToken(): AccessToken {
         val response = apolloClient.query(RefreshTokenQuery())
             .addHttpHeader("Refresh-Token-Request", "true")
             .execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         val responseJson = convertToJson((
                 response.data?.refresh ?: throw ApolloException("User not found")
@@ -130,7 +125,8 @@ class GraphQLRepository(
             throw ApolloException("Токен не был получен!")
         }
 
-// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ, ОТЛАДКА НЕ НУЖНА
+// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ,
+//  ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,
@@ -143,14 +139,14 @@ class GraphQLRepository(
             AddProjectMutation(name, organizationId, description)
         ).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.addProject?.id
             ?: throw ApolloException("Failed to add project: No ID returned")
     }
 
+    // FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК ИД НЕ БУДЕТ ВОЗВРАЩАТЬСЯ, А
+    //  СОХРАНЯТЬСЯ ЛОКАЛЬНО
     override suspend fun addTask(
         name: String,
         description: String,
@@ -180,20 +176,38 @@ class GraphQLRepository(
             )
         ).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.addTask?.id
+        val taskId = response.data?.addTask?.id
             ?: throw ApolloException("Failed to add task: No ID returned")
+
+        taskRepository.insert(
+            Task(
+                id = taskId,
+                name = name,
+                description = description,
+                isDone = isDone,
+                addedAt = "сейчас, епта!",
+                endDate = endDate,
+                assignerId = assignerId,
+                duration = duration,
+                color = color,
+                difficulty = difficulty,
+                projectId = projectId,
+                groupId = groupId,
+//                assignees = assignees
+            )
+        )
+
+        //TODO: НА МОМЕНТЕ СОХРАНЕНИЯ ЭТОГО ТАСКА И ЛОКАЛЬНО НЕОБХОДИМО БУДЕТ ПРИСВОИТЬ ЭТОТ ЖЕ ID
+        // => НЕ НУЖНО БУДЕТ ВОЗВРАЩАТЬ, А СОХРАНЯТЬ ЛОКАЛЬНО
+        return taskId
     }
 
     override suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask> {
         val response = apolloClient.query(GetFullTasksByAssignerIdQuery(assignerId)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
@@ -201,9 +215,7 @@ class GraphQLRepository(
     override suspend fun getFullTasksById(id: Int): List<FullTask> {
         val response = apolloClient.query(GetFullTasksByIdQuery(id)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
@@ -211,9 +223,7 @@ class GraphQLRepository(
     override suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
         val response = apolloClient.query(GetSimpleTasksByAssignerIdQuery(assignerId)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
     }
@@ -221,9 +231,7 @@ class GraphQLRepository(
     override suspend fun getSimpleTasksById(id: Int): List<SimpleTask> {
         val response = apolloClient.query(GetSimpleTasksByIdQuery(id)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?. map { it.toSimpleTask() } ?: emptyList()
     }
@@ -241,9 +249,7 @@ class GraphQLRepository(
             email
         )).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.requestChangePassword ?: false
     }
@@ -251,9 +257,7 @@ class GraphQLRepository(
     override suspend fun changePassword(newPassword: String, changePasswordToken: String): Boolean {
         val response = apolloClient.mutation(ChangePasswordMutation(newPassword, changePasswordToken)).execute()
 
-        if (response.hasErrors()) {
-            throw ApolloException(response.errors?.firstOrNull()?.message)
-        }
+        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.changePassword ?: false
     }

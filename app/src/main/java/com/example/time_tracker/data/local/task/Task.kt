@@ -38,7 +38,7 @@ data class Task(
     val addedAt: String,
     val endDate: String? = null,
     val doneAt: String? = null,
-    val assignerId: Int? = null,
+    val assignerId: String? = null,
     val duration: Int,
     val color: String,
     val difficulty: String,

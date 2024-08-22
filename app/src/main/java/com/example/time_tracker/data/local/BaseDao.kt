@@ -12,8 +12,8 @@ interface BaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: T)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(entities: List<T>)
+//    @Insert(onConflict = OnConflictStrategy.IGNORE)
+//    suspend fun insertAll(entities: List<T>)
 
     @Update
     suspend fun update(entity: T)

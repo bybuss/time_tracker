@@ -21,9 +21,13 @@ interface GraphQLClient {
         password: String
     ): String
 
-    suspend fun authUser(email: String, password: String): AccessToken //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
+    suspend fun authUser(email: String, password: String): AccessToken
 
-    suspend fun refreshToken(): AccessToken //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА НЕ НУЖНА
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
+    suspend fun refreshToken(): AccessToken
 
     suspend fun addProject(name: String, organizationId: Int, description: String): Int
 
