@@ -13,9 +13,11 @@ import com.example.time_tracker.ui.screens.createTask.FormViewModel
  */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
+
         initializer {
             SignUpViewModel(
-                timeTrackerApplication().container.graphQLRepository
+                timeTrackerApplication().container.graphQLRepository,
+                timeTrackerApplication().container.taskRepository
             )
         }
 

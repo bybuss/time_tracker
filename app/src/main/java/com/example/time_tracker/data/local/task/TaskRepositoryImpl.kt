@@ -22,4 +22,7 @@ class TaskRepositoryImpl(
 
     override fun getSimpleTasksById(id: Int): Flow<List<SimpleTask>>
         = taskDao.getSimpleTasksById(id)
+
+    override fun getAllTasks(): Flow<List<Task>>
+        = taskDao.getAllTasks()
 }

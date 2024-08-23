@@ -2,6 +2,7 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ sealed interface SignUpUiState {
 }
 
 class SignUpViewModel(
-    private val graphQLRepository: GraphQLRepository
+    private val graphQLRepository: GraphQLRepository,
+    private val taskRepository: TaskRepository
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -38,9 +40,7 @@ class SignUpViewModel(
                     name,
                     permissions
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -52,9 +52,7 @@ class SignUpViewModel(
                     email,
                     password
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -64,9 +62,7 @@ class SignUpViewModel(
             _uiState.value = try {
                 delay(500)
                 SignUpUiState.Success(graphQLRepository.refreshToken())
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -87,9 +83,7 @@ class SignUpViewModel(
                     email,
                     password
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -101,9 +95,7 @@ class SignUpViewModel(
                     name,
                     description
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -116,9 +108,7 @@ class SignUpViewModel(
                     organizationId,
                     description
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -151,9 +141,7 @@ class SignUpViewModel(
                     groupId,
                     assignees
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -162,9 +150,7 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(graphQLRepository.getFullTasksByAssignerId(assignerId))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -173,9 +159,7 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(graphQLRepository.getFullTasksById(id))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -184,9 +168,7 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(graphQLRepository.getSimpleTasksByAssignerId(assignerId))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -195,9 +177,7 @@ class SignUpViewModel(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 SignUpUiState.Success(graphQLRepository.getSimpleTasksById(id))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -216,9 +196,7 @@ class SignUpViewModel(
                     lastName,
                     email
                 ))
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }
 
@@ -233,5 +211,14 @@ class SignUpViewModel(
                 }
             }
         } ?: SignUpUiState.Error("Попробуйте снова перейти по ссылке в письме на вашей почте!")
+    }
+
+    fun getAllTasksFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(taskRepository.getAllTasks())
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+        }
     }
 }

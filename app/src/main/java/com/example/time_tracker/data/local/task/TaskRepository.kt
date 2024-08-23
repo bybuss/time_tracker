@@ -16,4 +16,6 @@ interface TaskRepository: BaseRepository<Task> {
     fun getSimpleTasksByAssignerId(assignerId: Int): Flow<List<SimpleTask>>
 
     fun getSimpleTasksById(id: Int): Flow<List<SimpleTask>>
+
+    fun getAllTasks(): Flow<List<Task>>
 }

@@ -35,7 +35,7 @@ import com.example.time_tracker.data.local.user_task.UserTaskDao
         UserOrg::class,
         UserTask::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -56,6 +56,7 @@ abstract class AppDatabase: RoomDatabase() {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "time_tracker")
                     .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .build()
                     .also { Instance = it }
             }

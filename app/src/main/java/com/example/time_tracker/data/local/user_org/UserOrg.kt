@@ -24,5 +24,6 @@ data class UserOrg(
     val userId: Int,
     val orgId: Int,
     val position: String,
-    val permissions: Map<String, Map<String, Boolean>>
+//FIXME: ДОБАВИТЬ КОНВЕРТОР ДЛЯ СЛОЖНЫХ ТИПОВ ДАННЫХ, ТК БД НЕ МОЖЕТ ЗАПИСАТЬ permissions
+//    val permissions: Map<String, Map<String, Boolean>>
 )
