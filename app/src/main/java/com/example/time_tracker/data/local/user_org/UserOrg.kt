@@ -9,21 +9,21 @@ import com.example.time_tracker.data.local.user.User
 /**
  * @author bybuss
  */
-@Entity(tableName = "user_org", foreignKeys = [
-    ForeignKey(
-        entity = User::class, parentColumns = ["id"], childColumns = ["userId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    ),
-    ForeignKey(
-        entity = Organization::class, parentColumns = ["id"], childColumns = ["orgId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    )
-])
+@Entity(tableName = "user_org", //foreignKeys = [
+//    ForeignKey(
+//        entity = User::class, parentColumns = ["id"], childColumns = ["userId"],
+//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+//    ),
+//    ForeignKey(
+//        entity = Organization::class, parentColumns = ["id"], childColumns = ["orgId"],
+//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+//    )
+//]
+)
 data class UserOrg(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val userId: Int,
     val orgId: Int,
     val position: String,
-//FIXME: ДОБАВИТЬ КОНВЕРТОР ДЛЯ СЛОЖНЫХ ТИПОВ ДАННЫХ, ТК БД НЕ МОЖЕТ ЗАПИСАТЬ permissions
-//    val permissions: Map<String, Map<String, Boolean>>
+    val permissions: Map<String, Map<String, Boolean>>
 )

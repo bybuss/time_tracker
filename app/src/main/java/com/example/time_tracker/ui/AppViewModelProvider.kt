@@ -20,8 +20,10 @@ object AppViewModelProvider {
             SignUpViewModel(
                 container.graphQLRepository,
                 container.taskRepository,
-                container.roleRepository
-
+                container.roleRepository,
+                container.organizationRepository,
+                container.projectRepository,
+                container.userRepository,
             )
         }
 

@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
 import com.example.time_tracker.domain.model.AdminRole
 import com.example.time_tracker.domain.model.ButtonAction
+import kotlinx.coroutines.Dispatchers
 
 /**
  * @author bybuss
@@ -42,7 +43,7 @@ import com.example.time_tracker.domain.model.ButtonAction
 fun TestButtonsScreen() {
     val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val uiState by signUpViewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope { Dispatchers.IO }
     var showDialog by remember { mutableStateOf(false) }
 
     val buttons = listOf(
@@ -55,23 +56,33 @@ fun TestButtonsScreen() {
             }
             showDialog = true
         },
-        ButtonAction("Add User") {
-            coroutineScope.launch {
-                signUpViewModel.addUser(
-                    firstName = "eblo",
-                    lastName = "slona",
-                    roleId = 1,
-                    email = "babakapa729@gmail.com",
-                    password = "string"
-                )
-            }
-            showDialog = true
-        },
         ButtonAction("Add Organization") {
             coroutineScope.launch {
                 signUpViewModel.addOrganization(
                     name = "organization",
                     description = "description"
+                )
+            }
+            showDialog = true
+        },
+        ButtonAction("addProject") {
+            coroutineScope.launch {
+                signUpViewModel.addProject(
+                    name = "project",
+                    description = "description",
+                    organizationId = 14
+                )
+            }
+            showDialog = true
+        },
+        ButtonAction("Add User") {
+            coroutineScope.launch {
+                signUpViewModel.addUser(
+                    firstName = "eblo",
+                    lastName = "slona",
+                    roleId = 17,
+                    email = "babakapa729@gmail.com",
+                    password = "string"
                 )
             }
             showDialog = true
@@ -91,12 +102,25 @@ fun TestButtonsScreen() {
             }
             showDialog = true
         },
-        ButtonAction("addProject") {
+        ButtonAction("Add Task") {
             coroutineScope.launch {
-                signUpViewModel.addProject(
-                    name = "project",
-                    description = "description",
-                    organizationId = 1
+                signUpViewModel.addTask(
+                    name = "zalupa",
+                    description = "slona",
+                    isDone = false,
+                    assignerId = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                    color = "#FF1A1A",
+                    duration = 720012,
+                    endDate = null,
+                    difficulty = "hard",
+                    projectId = 6,
+                    groupId = null,
+                    assignees = listOf(
+                        mapOf(
+                            "id" to "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                            "organizationId" to 1
+                        )
+                    )
                 )
             }
             showDialog = true
@@ -122,30 +146,6 @@ fun TestButtonsScreen() {
         ButtonAction("Get Simple Tasks By Id") {
             coroutineScope.launch {
                 signUpViewModel.getSimpleTasksById(20)
-            }
-            showDialog = true
-        },
-
-        ButtonAction("Add Task") {
-            coroutineScope.launch {
-                signUpViewModel.addTask(
-                    name = "zalupa",
-                    description = "slona",
-                    isDone = false,
-                    assignerId = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
-                    color = "#FF1A1A",
-                    duration = 720012,
-                    endDate = null,
-                    difficulty = "hard",
-                    projectId = 1,
-                    groupId = null,
-                    assignees = listOf(
-                        mapOf(
-                            "id" to "96b3d5fd-523c-45e6-9002-66d50902bfc4",
-                            "organizationId" to 1
-                        )
-                    )
-                )
             }
             showDialog = true
         },
@@ -179,7 +179,25 @@ fun TestButtonsScreen() {
                 signUpViewModel.getAllRolesFromRoom()
             }
             showDialog = true
-        }
+        },
+        ButtonAction("Get All Organizations From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllOrganizationsFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All ProjectsFrom Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllProjectsFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All Users From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllUsersFromRoom()
+            }
+            showDialog = true
+        },
     )
 
     Column(

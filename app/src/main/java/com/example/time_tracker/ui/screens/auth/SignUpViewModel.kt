@@ -2,8 +2,11 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.time_tracker.data.local.organization.OrganizationRepository
+import com.example.time_tracker.data.local.project.ProjectRepository
 import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.TaskRepository
+import com.example.time_tracker.data.local.user.UserRepository
 import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +27,10 @@ sealed interface SignUpUiState {
 class SignUpViewModel(
     private val graphQLRepository: GraphQLRepository,
     private val taskRepository: TaskRepository,
-    private val roleRepository: RoleRepository
+    private val roleRepository: RoleRepository,
+    private val organizationRepository: OrganizationRepository,
+    private val projectRepository: ProjectRepository,
+    private val userRepository: UserRepository,
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -231,5 +237,29 @@ class SignUpViewModel(
                  SignUpUiState.Success(roleRepository.getAllRoles().first())
              } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
          }
+    }
+    fun getAllOrganizationsFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(organizationRepository.getAllOrganizations().first())
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+        }
+    }
+    fun getAllProjectsFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(projectRepository.getAllProjects().first())
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+        }
+    }
+    fun getAllUsersFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                SignUpUiState.Success(userRepository.getAllUsers().first())
+            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+        }
     }
 }

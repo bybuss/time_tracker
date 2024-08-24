@@ -5,10 +5,16 @@ import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.data.local.AppDatabase
+import com.example.time_tracker.data.local.organization.OrganizationRepository
+import com.example.time_tracker.data.local.organization.OrganizationRepositoryImpl
+import com.example.time_tracker.data.local.project.ProjectRepository
+import com.example.time_tracker.data.local.project.ProjectRepositoryImpl
 import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.role.RoleRepositoryImpl
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.task.TaskRepositoryImpl
+import com.example.time_tracker.data.local.user.UserRepository
+import com.example.time_tracker.data.local.user.UserRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
 import com.example.time_tracker.data.network.TokenStoreRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
@@ -30,6 +36,9 @@ interface AppContainer {
 
     val taskRepository: TaskRepository
     val roleRepository: RoleRepository
+    val organizationRepository: OrganizationRepository
+    val projectRepository: ProjectRepository
+    val userRepository: UserRepository
 }
 
 class AppContainerImpl(private val context: Context): AppContainer {
@@ -48,9 +57,17 @@ class AppContainerImpl(private val context: Context): AppContainer {
     override val taskRepository: TaskRepository by lazy {
         TaskRepositoryImpl(AppDatabase.getDatabase(context).taskDao())
     }
-
     override val roleRepository: RoleRepository by lazy {
         RoleRepositoryImpl(AppDatabase.getDatabase(context).roleDao())
+    }
+    override val organizationRepository: OrganizationRepository by lazy {
+        OrganizationRepositoryImpl(AppDatabase.getDatabase(context).organizationDao())
+    }
+    override val projectRepository: ProjectRepository by lazy {
+        ProjectRepositoryImpl(AppDatabase.getDatabase(context).projectDao())
+    }
+    override val userRepository: UserRepository by lazy {
+        UserRepositoryImpl(AppDatabase.getDatabase(context).userDao())
     }
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -75,7 +92,10 @@ class AppContainerImpl(private val context: Context): AppContainer {
             apolloClient,
             tokenStoreRepository,
             taskRepository,
-            roleRepository
+            roleRepository,
+            organizationRepository,
+            projectRepository,
+            userRepository
         )
     }
 

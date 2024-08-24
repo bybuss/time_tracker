@@ -18,7 +18,7 @@ import com.example.time_tracker.data.local.project.Project
  * */
 @Entity(tableName = "tasks", //foreignKeys = [
 //    ForeignKey(
-//        entity = User::class, parentColumns = ["id"], childColumns = ["assignerId"],
+//        entity = UserTask::class, parentColumns = ["userId"], childColumns = ["assignerId"],
 //        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
 //    ),
 //    ForeignKey(

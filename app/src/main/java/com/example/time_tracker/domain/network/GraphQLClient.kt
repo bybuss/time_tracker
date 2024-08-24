@@ -9,10 +9,16 @@ import com.example.time_tracker.domain.model.SimpleTask
  */
 interface GraphQLClient {
 
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
     suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int
 
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
     suspend fun addOrganization(name: String, description: String): Int
 
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
     suspend fun addUser(
         firstName: String,
         lastName: String,
@@ -29,8 +35,12 @@ interface GraphQLClient {
     // ОТЛАДКА НЕ НУЖНА
     suspend fun refreshToken(): AccessToken
 
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
     suspend fun addProject(name: String, organizationId: Int, description: String): Int
 
+    //FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ,
+    // ОТЛАДКА НЕ НУЖНА
     suspend fun addTask(
         name: String,
         description: String,

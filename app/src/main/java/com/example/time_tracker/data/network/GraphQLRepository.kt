@@ -17,10 +17,16 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTasksByIdQuery
 import com.example.time_tracker.GetSimpleTasksByIdQuery
+import com.example.time_tracker.data.local.organization.Organization
+import com.example.time_tracker.data.local.organization.OrganizationRepository
+import com.example.time_tracker.data.local.project.Project
+import com.example.time_tracker.data.local.project.ProjectRepository
 import com.example.time_tracker.data.local.role.Role
 import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.Task
 import com.example.time_tracker.data.local.task.TaskRepository
+import com.example.time_tracker.data.local.user.User
+import com.example.time_tracker.data.local.user.UserRepository
 import com.example.time_tracker.domain.model.AccessToken
 import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
@@ -35,7 +41,10 @@ class GraphQLRepository(
     private val apolloClient: ApolloClient,
     private val tokenStoreRepository: TokenStoreRepository,
     private val taskRepository: TaskRepository,
-    private val roleRepository: RoleRepository
+    private val roleRepository: RoleRepository,
+    private val organizationRepository: OrganizationRepository,
+    private val projectRepository: ProjectRepository,
+    private val userRepository: UserRepository,
 ): GraphQLClient {
     override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
@@ -61,8 +70,18 @@ class GraphQLRepository(
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.addOrganization?.id
+        val organizationId = response.data?.addOrganization?.id
             ?: throw ApolloException("Failed to add organization: No ID returned")
+
+        organizationRepository.insert(
+            Organization(
+                id = organizationId,
+                name = name,
+                description = description
+            )
+        )
+
+        return organizationId
     }
 
     override suspend fun addUser(
@@ -82,9 +101,23 @@ class GraphQLRepository(
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return (response.data?.addUser?.id
+        val userId = (response.data?.addUser?.id
             ?: throw ApolloException("Failed to add user: No ID returned")
         ).toString()
+
+        userRepository.insert(
+            User (
+                id = userId,
+                firstName = firstName,
+                lastName = lastName,
+                roleId = roleId,
+                email = email,
+                registeredAt = "сейчас епта!",
+                hashedPassword = password,
+            )
+        )
+
+        return userId
     }
 // FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА
 //  НЕ НУЖНА
@@ -161,8 +194,20 @@ class GraphQLRepository(
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.addProject?.id
+        val projectId = response.data?.addProject?.id
             ?: throw ApolloException("Failed to add project: No ID returned")
+
+        projectRepository.insert(
+            Project(
+                id = projectId,
+                name = name,
+                organizationId = organizationId,
+                createdAt = "сейчас епта!",
+                description = description
+            )
+        )
+
+        return projectId
     }
 
     // FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК ИД НЕ БУДЕТ ВОЗВРАЩАТЬСЯ, А
@@ -192,7 +237,7 @@ class GraphQLRepository(
                 difficulty,
                 projectId,
                 Optional.presentIfNotNull(groupId),
-                assignees
+                Optional.presentIfNotNull(assignees)
             )
         ).execute()
 
