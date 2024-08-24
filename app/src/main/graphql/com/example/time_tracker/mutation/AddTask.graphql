@@ -9,7 +9,7 @@ mutation AddTask(
     $difficulty: String!,
     $projectId: Int!,
     $groupId: Int,
-    $assignees: [JSON!]!
+    $assignees: [JSON!]
 ) {
     addTask(
         data: {
