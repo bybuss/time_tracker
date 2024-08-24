@@ -16,20 +16,21 @@ import com.example.time_tracker.data.local.project.Project
  * какой группе или проекту, а в случае с создателем задачи, при его удалении задача может остаться
  * в проекте или группе.
  * */
-@Entity(tableName = "tasks", foreignKeys = [
-    ForeignKey(
-        entity = User::class, parentColumns = ["id"], childColumns = ["assignerId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    ),
-    ForeignKey(
-        entity = Project::class, parentColumns = ["id"], childColumns = ["projectId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    ),
-    ForeignKey(
-        entity = Group::class, parentColumns = ["id"], childColumns = ["groupId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    )
-])
+@Entity(tableName = "tasks", //foreignKeys = [
+//    ForeignKey(
+//        entity = User::class, parentColumns = ["id"], childColumns = ["assignerId"],
+//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+//    ),
+//    ForeignKey(
+//        entity = Project::class, parentColumns = ["id"], childColumns = ["projectId"],
+//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+//    ),
+//    ForeignKey(
+//        entity = Group::class, parentColumns = ["id"], childColumns = ["groupId"],
+//        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
+//    )
+//]
+)
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,

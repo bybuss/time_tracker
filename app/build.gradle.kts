@@ -62,7 +62,7 @@ android {
 
 dependencies {
     // Compose BOM
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.08.00"))
 
     // AndroidX Core and Activity
     implementation("androidx.core:core-ktx:1.13.1")
@@ -124,6 +124,9 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     implementation("com.github.stevdza-san:OneTapCompose:1.0.13")
 }

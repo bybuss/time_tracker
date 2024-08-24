@@ -35,7 +35,7 @@ import com.example.time_tracker.data.local.user_task.UserTaskDao
         UserOrg::class,
         UserTask::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {

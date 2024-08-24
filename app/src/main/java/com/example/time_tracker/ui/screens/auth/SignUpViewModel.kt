@@ -7,6 +7,7 @@ import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -217,7 +218,7 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(taskRepository.getAllTasks())
+                SignUpUiState.Success(taskRepository.getAllTasks().first())
             } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
     }

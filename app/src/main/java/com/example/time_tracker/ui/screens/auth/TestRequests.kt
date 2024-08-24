@@ -179,7 +179,9 @@ fun TestButtonsScreen() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         buttons.forEach { buttonAction ->
             Button(onClick = buttonAction.action) {

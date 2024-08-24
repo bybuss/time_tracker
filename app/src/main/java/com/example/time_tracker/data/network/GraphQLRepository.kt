@@ -1,5 +1,6 @@
 package com.example.time_tracker.data.network
 
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
@@ -88,8 +89,11 @@ class GraphQLRepository(
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
 
         tokenStoreRepository.saveAccessToken(accessToken.token)
+        Log.d("TokenStoreRepository", "saveAccessToken from authUser: ${accessToken.token}")
         tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
-        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.createdAt)
+        Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from authUser: ${accessToken.expiresIn}")
+        tokenStoreRepository.saveAccessTokenCreatedTime(accessToken.createdAt)
+        Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from authUser: ${accessToken.createdAt}")
 
         if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty())
             throw ApolloException("Токен не был получен!")
@@ -117,9 +121,12 @@ class GraphQLRepository(
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
 
-        tokenStoreRepository.saveAccessToken(accessToken.token)
-        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
-        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.createdAt)
+    tokenStoreRepository.saveAccessToken(accessToken.token)
+    Log.d("TokenStoreRepository", "saveAccessToken from refreshToken: ${accessToken.token}")
+    tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
+    Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.expiresIn}")
+    tokenStoreRepository.saveAccessTokenCreatedTime(accessToken.createdAt)
+    Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.createdAt}")
 
         if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
             throw ApolloException("Токен не был получен!")
