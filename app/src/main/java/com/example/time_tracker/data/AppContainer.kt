@@ -5,6 +5,8 @@ import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.data.local.AppDatabase
+import com.example.time_tracker.data.local.role.RoleRepository
+import com.example.time_tracker.data.local.role.RoleRepositoryImpl
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.task.TaskRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
@@ -27,6 +29,7 @@ interface AppContainer {
     val graphQLRepository: GraphQLRepository
 
     val taskRepository: TaskRepository
+    val roleRepository: RoleRepository
 }
 
 class AppContainerImpl(private val context: Context): AppContainer {
@@ -44,6 +47,10 @@ class AppContainerImpl(private val context: Context): AppContainer {
 
     override val taskRepository: TaskRepository by lazy {
         TaskRepositoryImpl(AppDatabase.getDatabase(context).taskDao())
+    }
+
+    override val roleRepository: RoleRepository by lazy {
+        RoleRepositoryImpl(AppDatabase.getDatabase(context).roleDao())
     }
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -67,7 +74,8 @@ class AppContainerImpl(private val context: Context): AppContainer {
         GraphQLRepository(
             apolloClient,
             tokenStoreRepository,
-            taskRepository
+            taskRepository,
+            roleRepository
         )
     }
 

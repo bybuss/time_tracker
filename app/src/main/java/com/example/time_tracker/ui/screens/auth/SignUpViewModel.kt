@@ -2,6 +2,7 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.delay
@@ -22,7 +23,8 @@ sealed interface SignUpUiState {
 
 class SignUpViewModel(
     private val graphQLRepository: GraphQLRepository,
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val roleRepository: RoleRepository
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -221,5 +223,13 @@ class SignUpViewModel(
                 SignUpUiState.Success(taskRepository.getAllTasks().first())
             } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
         }
+    }
+    fun getAllRolesFromRoom() {
+         viewModelScope.launch {
+             _uiState.value = SignUpUiState.Loading
+             _uiState.value = try {
+                 SignUpUiState.Success(roleRepository.getAllRoles().first())
+             } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+         }
     }
 }

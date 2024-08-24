@@ -1,6 +1,7 @@
 package com.example.time_tracker.data.local.role
 
-import com.example.time_tracker.data.local.BaseRepositoryImpl
+import com.example.time_tracker.data.local.base.BaseRepositoryImpl
+import kotlinx.coroutines.flow.Flow
 
 /**
  * @author bybuss
@@ -8,4 +9,5 @@ import com.example.time_tracker.data.local.BaseRepositoryImpl
 class RoleRepositoryImpl(
     private val roleDao: RoleDao
 ): BaseRepositoryImpl<Role>(roleDao), RoleRepository {
+    override fun getAllRoles(): Flow<List<Role>> = roleDao.getAllRoles()
 }

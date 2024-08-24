@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.task
 
-import com.example.time_tracker.data.local.BaseRepository
+import com.example.time_tracker.data.local.base.BaseRepository
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import kotlinx.coroutines.flow.Flow

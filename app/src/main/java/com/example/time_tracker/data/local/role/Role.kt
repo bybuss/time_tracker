@@ -10,6 +10,5 @@ import androidx.room.PrimaryKey
 data class Role(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
-//FIXME: ДОБАВИТЬ КОНВЕРТОР ДЛЯ СЛОЖНЫХ ТИПОВ ДАННЫХ, ТК БД НЕ МОЖЕТ ЗАПИСАТЬ permissions
-//    val permissions: Map<String, Map<String, Boolean>>
+    val permissions: Map<String, Map<String, Boolean>>
 )

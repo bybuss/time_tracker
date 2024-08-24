@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.time_tracker.data.local.group.Group
 import com.example.time_tracker.data.local.group.GroupDao
 import com.example.time_tracker.data.local.organization.Organization
@@ -35,9 +36,10 @@ import com.example.time_tracker.data.local.user_task.UserTaskDao
         UserOrg::class,
         UserTask::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun groupDao(): GroupDao
     abstract fun organizationDao(): OrganizationDao

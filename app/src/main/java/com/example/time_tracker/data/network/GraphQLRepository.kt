@@ -17,6 +17,8 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTasksByIdQuery
 import com.example.time_tracker.GetSimpleTasksByIdQuery
+import com.example.time_tracker.data.local.role.Role
+import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.Task
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.domain.model.AccessToken
@@ -32,15 +34,26 @@ import kotlinx.serialization.json.Json
 class GraphQLRepository(
     private val apolloClient: ApolloClient,
     private val tokenStoreRepository: TokenStoreRepository,
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val roleRepository: RoleRepository
 ): GraphQLClient {
     override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.addRole?.id
+        val roleId = response.data?.addRole?.id
             ?: throw ApolloException("Failed to add role: No ID returned")
+
+        roleRepository.insert(
+            Role(
+                id = roleId,
+                name = name,
+                permissions = permissions
+            )
+        )
+
+        return roleId
     }
 
     override suspend fun addOrganization(name: String, description: String): Int {

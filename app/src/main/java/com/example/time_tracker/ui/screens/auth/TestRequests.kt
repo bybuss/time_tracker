@@ -173,6 +173,12 @@ fun TestButtonsScreen() {
                 signUpViewModel.getAllTasksFromRoom()
             }
             showDialog = true
+        },
+        ButtonAction("Get All Roles From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllRolesFromRoom()
+            }
+            showDialog = true
         }
     )
 
