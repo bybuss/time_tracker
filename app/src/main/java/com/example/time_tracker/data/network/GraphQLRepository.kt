@@ -10,13 +10,13 @@ import com.example.time_tracker.AddRoleMutation
 import com.example.time_tracker.AddTaskMutation
 import com.example.time_tracker.AddUserMutation
 import com.example.time_tracker.AuthUserQuery
-import com.example.time_tracker.GetFullTasksByAssignerIdQuery
-import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
+import com.example.time_tracker.GetAllFullTasksByAssignerIdQuery
+import com.example.time_tracker.GetAllSimpleTasksByAssignerIdQuery
 import com.example.time_tracker.RefreshTokenQuery
 import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
-import com.example.time_tracker.GetFullTasksByIdQuery
-import com.example.time_tracker.GetSimpleTasksByIdQuery
+import com.example.time_tracker.GetFullTaskByIdQuery
+import com.example.time_tracker.GetSimpleTaskByIdQuery
 import com.example.time_tracker.data.local.organization.Organization
 import com.example.time_tracker.data.local.organization.OrganizationRepository
 import com.example.time_tracker.data.local.project.Project
@@ -269,36 +269,38 @@ class GraphQLRepository(
         return taskId
     }
 
-    override suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask> {
-        val response = apolloClient.query(GetFullTasksByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getAllFullTasksByAssignerId(assignerId: String): List<FullTask> {
+        val response = apolloClient.query(GetAllFullTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
     }
 
-    override suspend fun getFullTasksById(id: Int): List<FullTask> {
-        val response = apolloClient.query(GetFullTasksByIdQuery(id)).execute()
+    override suspend fun getFullTaskById(id: Int): FullTask {
+        val response = apolloClient.query(GetFullTaskByIdQuery(id)).execute()
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
+        return response.data?.getTask?.firstOrNull()?.toFullTask()
+            ?: throw ApolloException("Нет такой задачи!")
     }
 
-    override suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
-        val response = apolloClient.query(GetSimpleTasksByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getAllSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
+        val response = apolloClient.query(GetAllSimpleTasksByAssignerIdQuery(assignerId)).execute()
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
         return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
     }
 
-    override suspend fun getSimpleTasksById(id: Int): List<SimpleTask> {
-        val response = apolloClient.query(GetSimpleTasksByIdQuery(id)).execute()
+    override suspend fun getSimpleTaskById(id: Int): SimpleTask {
+        val response = apolloClient.query(GetSimpleTaskByIdQuery(id)).execute()
 
         if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
 
-        return response.data?.getTask?. map { it.toSimpleTask() } ?: emptyList()
+        return response.data?.getTask?.firstOrNull()?.toSimpleTask()
+            ?: throw ApolloException("Нет такой задачи!")
     }
 
     override suspend fun requestChangePassword(

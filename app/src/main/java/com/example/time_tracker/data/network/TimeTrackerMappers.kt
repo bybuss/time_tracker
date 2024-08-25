@@ -1,9 +1,10 @@
 package com.example.time_tracker.data.network
 
-import com.example.time_tracker.GetFullTasksByAssignerIdQuery
-import com.example.time_tracker.GetFullTasksByIdQuery
-import com.example.time_tracker.GetSimpleTasksByAssignerIdQuery
-import com.example.time_tracker.GetSimpleTasksByIdQuery
+import com.apollographql.apollo3.exception.ApolloException
+import com.example.time_tracker.GetAllFullTasksByAssignerIdQuery
+import com.example.time_tracker.GetFullTaskByIdQuery
+import com.example.time_tracker.GetAllSimpleTasksByAssignerIdQuery
+import com.example.time_tracker.GetSimpleTaskByIdQuery
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 
@@ -21,7 +22,7 @@ fun convertToJson(input: String): String {
         .replace("\":\"{", "\":{")
 }
 
-fun GetFullTasksByAssignerIdQuery.GetTask.toFulTask(): FullTask {
+fun GetAllFullTasksByAssignerIdQuery.GetTask.toFulTask(): FullTask {
     return FullTask(
         id = id!!,
         name = name!!,
@@ -31,14 +32,14 @@ fun GetFullTasksByAssignerIdQuery.GetTask.toFulTask(): FullTask {
         doneAt = doneAt.toString(),
         assignerId = assignerId.toString(),
         color = color,
-        duration = (duration ?: 0) as Int,
+        duration = (duration as? Int) ?: 0,
         difficulty = difficulty,
         projectId = projectId!!,
         groupId = groupId
     )
 }
 
-fun GetFullTasksByIdQuery.GetTask.toFulTask(): FullTask {
+fun GetFullTaskByIdQuery.GetTask.toFullTask(): FullTask {
     return FullTask(
         id = id!!,
         name = name!!,
@@ -48,28 +49,28 @@ fun GetFullTasksByIdQuery.GetTask.toFulTask(): FullTask {
         doneAt = doneAt.toString(),
         assignerId = assignerId.toString(),
         color = color,
-        duration = (duration ?: 0) as Int,
+        duration = (duration as? Int) ?: 0,
         difficulty = difficulty,
         projectId = projectId!!,
         groupId = groupId
     )
 }
 
-fun GetSimpleTasksByAssignerIdQuery.GetTask.toSimpleTask(): SimpleTask {
+fun GetAllSimpleTasksByAssignerIdQuery.GetTask.toSimpleTask(): SimpleTask {
     return SimpleTask(
         id = id!!,
         name = name!!,
-        isDone = isDone!!,
+        isDone = isDone ?: false,
         addedAt = addedAt.toString(),
         doneAt = doneAt.toString()
     )
 }
 
-fun GetSimpleTasksByIdQuery.GetTask.toSimpleTask(): SimpleTask {
+fun GetSimpleTaskByIdQuery.GetTask.toSimpleTask(): SimpleTask {
     return SimpleTask(
         id = id!!,
         name = name!!,
-        isDone = isDone!!,
+        isDone = isDone ?: false,
         addedAt = addedAt.toString(),
         doneAt = doneAt.toString()
     )

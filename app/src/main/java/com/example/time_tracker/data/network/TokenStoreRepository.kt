@@ -11,6 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.time_tracker.domain.network.TokenStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import java.io.IOException
@@ -59,23 +60,23 @@ class TokenStoreRepository(private val context: Context): TokenStore {
             .onEach { Log.d("TokenStoreRepository", "getAccessToken: $it") }
     }
 
-    override fun getAccessTokenExpiresTime(): String {
+    override fun getAccessTokenExpiresTime(): Flow<String> {
         return context.dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else { throw exception }
         }
-        .map { it[PreferencesKeys.ACCESS_TOKEN_EXPIRES_TIME] ?: "" }.toString()
+        .map { it[PreferencesKeys.ACCESS_TOKEN_EXPIRES_TIME] ?: "" }
         .onEach { Log.d("TokenStoreRepository", "getAccessTokenExpiresTime: $it") }
     }
 
-    override fun getAccessTokenCreatedTime(): String {
+    override fun getAccessTokenCreatedTime(): Flow<String> {
         return context.dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else { throw exception }
         }
-        .map { it[PreferencesKeys.ACCESS_TOKEN_CREATED_TIME] ?: "" }.toString()
+        .map { it[PreferencesKeys.ACCESS_TOKEN_CREATED_TIME] ?: "" }
         .onEach { Log.d("TokenStoreRepository", "getAccessTokenCreatedTime: $it") }
     }
 

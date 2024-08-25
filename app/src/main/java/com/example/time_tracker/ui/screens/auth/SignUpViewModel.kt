@@ -8,11 +8,13 @@ import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.user.UserRepository
 import com.example.time_tracker.data.network.GraphQLRepository
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 /**
  * @author bybuss
@@ -37,6 +39,10 @@ class SignUpViewModel(
     var token: String? = null
         private set
 
+    companion object {
+        const val TIMEOUT_MILLIS: Long = 5_000L
+    }
+
     fun setToken(responseToken: String) {
         token = responseToken
     }
@@ -45,11 +51,19 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.addRole(
-                    name,
-                    permissions
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.addRole(
+                            name,
+                            permissions
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -57,11 +71,19 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.authUser(
-                    email,
-                    password
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.authUser(
+                            email,
+                            password
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -69,9 +91,15 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                delay(500)
-                SignUpUiState.Success(graphQLRepository.refreshToken())
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    //delay(500)
+                    SignUpUiState.Success(graphQLRepository.refreshToken())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -85,14 +113,22 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.addUser(
-                    firstName,
-                    lastName,
-                    roleId,
-                    email,
-                    password
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.addUser(
+                            firstName,
+                            lastName,
+                            roleId,
+                            email,
+                            password
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -100,11 +136,19 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.addOrganization(
-                    name,
-                    description
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.addOrganization(
+                            name,
+                            description
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -112,12 +156,20 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.addProject(
-                    name,
-                    organizationId,
-                    description
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.addProject(
+                            name,
+                            organizationId,
+                            description
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -137,56 +189,88 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.addTask(
-                    name,
-                    description,
-                    isDone,
-                    assignerId,
-                    color,
-                    duration,
-                    endDate,
-                    difficulty,
-                    projectId,
-                    groupId,
-                    assignees
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.addTask(
+                            name,
+                            description,
+                            isDone,
+                            assignerId,
+                            color,
+                            duration,
+                            endDate,
+                            difficulty,
+                            projectId,
+                            groupId,
+                            assignees
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
-    suspend fun getFullTasksByAssignerId(assignerId: String) {
+    suspend fun getAllFullTasksByAssignerId(assignerId: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.getFullTasksByAssignerId(assignerId))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(graphQLRepository.getAllFullTasksByAssignerId(assignerId))
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
-    suspend fun getFullTasksById(id: Int) {
+    suspend fun getFullTaskById(id: Int) {
         viewModelScope.launch{
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.getFullTasksById(id))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(graphQLRepository.getFullTaskById(id))
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
-    suspend fun getSimpleTasksByAssignerId(assignerId: String) {
+    suspend fun getAllSimpleTasksByAssignerId(assignerId: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.getSimpleTasksByAssignerId(assignerId))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(graphQLRepository.getAllSimpleTasksByAssignerId(assignerId))
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
-    suspend fun getSimpleTasksById(id: Int) {
+    suspend fun getSimpleTaskById(id: Int) {
         viewModelScope.launch{
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.getSimpleTasksById(id))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(graphQLRepository.getSimpleTaskById(id))
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -199,13 +283,21 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(graphQLRepository.requestChangePassword(
-                    id,
-                    firstName,
-                    lastName,
-                    email
-                ))
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(
+                        graphQLRepository.requestChangePassword(
+                            id,
+                            firstName,
+                            lastName,
+                            email
+                        )
+                    )
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -214,7 +306,11 @@ class SignUpViewModel(
             viewModelScope.launch {
                 _uiState.value = SignUpUiState.Loading
                 _uiState.value = try {
-                    SignUpUiState.Success(graphQLRepository.changePassword(newPassword, it))
+                    withTimeout(TIMEOUT_MILLIS) {
+                        SignUpUiState.Success(graphQLRepository.changePassword(newPassword, it))
+                    }
+                } catch (e: TimeoutCancellationException) {
+                    SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
                 } catch (e: Exception) {
                     SignUpUiState.Error(e.message.toString())
                 }
@@ -226,40 +322,70 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(taskRepository.getAllTasks().first())
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(taskRepository.getAllTasks().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
     fun getAllRolesFromRoom() {
          viewModelScope.launch {
              _uiState.value = SignUpUiState.Loading
              _uiState.value = try {
-                 SignUpUiState.Success(roleRepository.getAllRoles().first())
-             } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                 withTimeout(TIMEOUT_MILLIS) {
+                     SignUpUiState.Success(roleRepository.getAllRoles().first())
+                 }
+             } catch (e: TimeoutCancellationException) {
+                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+             } catch (e: Exception) {
+                 SignUpUiState.Error(e.message.toString())
+             }
          }
     }
     fun getAllOrganizationsFromRoom() {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(organizationRepository.getAllOrganizations().first())
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(organizationRepository.getAllOrganizations().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
     fun getAllProjectsFromRoom() {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(projectRepository.getAllProjects().first())
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(projectRepository.getAllProjects().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
     fun getAllUsersFromRoom() {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
-                SignUpUiState.Success(userRepository.getAllUsers().first())
-            } catch (e: Exception) { SignUpUiState.Error(e.message.toString()) }
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(userRepository.getAllUsers().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
         }
     }
 }

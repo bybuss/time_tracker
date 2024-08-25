@@ -1,4 +1,4 @@
-query GetFullTasksById($id: Int!) {
+query GetFullTaskById($id: Int!) {
     getTask(
         searchData: { id: $id }
     ) {

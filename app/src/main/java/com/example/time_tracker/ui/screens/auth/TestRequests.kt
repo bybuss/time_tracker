@@ -125,27 +125,27 @@ fun TestButtonsScreen() {
             }
             showDialog = true
         },
-        ButtonAction("Get Full Tasks By Assigner Id") {
+        ButtonAction("Get All Full Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getFullTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
+                signUpViewModel.getAllFullTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
             }
             showDialog = true
         },
-        ButtonAction("Get Full Tasks By Id") {
+        ButtonAction("Get Full Task By Id") {
             coroutineScope.launch {
-                signUpViewModel.getFullTasksById(20)
+                signUpViewModel.getFullTaskById(20)
             }
             showDialog = true
         },
-        ButtonAction("Get Simple Tasks By Assigner Id") {
+        ButtonAction("Get All Simple Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getSimpleTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
+                signUpViewModel.getAllSimpleTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
             }
             showDialog = true
         },
-        ButtonAction("Get Simple Tasks By Id") {
+        ButtonAction("Get Simple Task By Id") {
             coroutineScope.launch {
-                signUpViewModel.getSimpleTasksById(20)
+                signUpViewModel.getSimpleTaskById(20)
             }
             showDialog = true
         },

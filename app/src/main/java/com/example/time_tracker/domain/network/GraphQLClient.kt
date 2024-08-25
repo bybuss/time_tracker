@@ -55,13 +55,13 @@ interface GraphQLClient {
         assignees: List<Map<String, Any>>
     ): Int
 
-    suspend fun getFullTasksByAssignerId(assignerId: String): List<FullTask>
+    suspend fun getAllFullTasksByAssignerId(assignerId: String): List<FullTask>
 
-    suspend fun getFullTasksById(id: Int): List<FullTask>
+    suspend fun getFullTaskById(id: Int): FullTask
 
-    suspend fun getSimpleTasksByAssignerId(assignerId: String): List<SimpleTask>
+    suspend fun getAllSimpleTasksByAssignerId(assignerId: String): List<SimpleTask>
 
-    suspend fun getSimpleTasksById(id: Int): List<SimpleTask>
+    suspend fun getSimpleTaskById(id: Int): SimpleTask
 
     suspend fun requestChangePassword(
         id: String,
