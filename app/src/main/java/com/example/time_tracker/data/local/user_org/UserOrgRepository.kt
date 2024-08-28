@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.user_org
 
-import com.example.time_tracker.data.local.base.BaseRepository
+import com.example.time_tracker.base.BaseRepository
 
 /**
  * @author bybuss

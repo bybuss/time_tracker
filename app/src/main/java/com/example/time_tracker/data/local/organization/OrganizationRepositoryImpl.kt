@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.organization
 
-import com.example.time_tracker.data.local.base.BaseRepositoryImpl
+import com.example.time_tracker.base.BaseRepositoryImpl
 import kotlinx.coroutines.flow.Flow
 
 /**

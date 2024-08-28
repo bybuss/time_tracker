@@ -36,7 +36,7 @@ import com.example.time_tracker.data.local.user_task.UserTaskDao
         UserOrg::class,
         UserTask::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

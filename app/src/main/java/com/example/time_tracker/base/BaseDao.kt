@@ -1,4 +1,4 @@
-package com.example.time_tracker.data.local.base
+package com.example.time_tracker.base
 
 import androidx.room.Dao
 import androidx.room.Delete

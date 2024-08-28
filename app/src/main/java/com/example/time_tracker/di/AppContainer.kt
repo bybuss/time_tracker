@@ -1,4 +1,4 @@
-package com.example.time_tracker.data
+package com.example.time_tracker.di
 
 import android.content.Context
 import android.provider.Settings

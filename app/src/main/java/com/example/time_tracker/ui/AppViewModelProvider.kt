@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.time_tracker.TimeTrackerApplication
-import com.example.time_tracker.data.AppContainer
+import com.example.time_tracker.di.AppContainer
 import com.example.time_tracker.ui.screens.auth.SignUpViewModel
 import com.example.time_tracker.ui.screens.createTask.FormViewModel
 

@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.time_tracker.data.local.project.Project
+import com.example.time_tracker.data.local.user.User
 
 /**
  * @author bybuss
@@ -13,11 +14,15 @@ import com.example.time_tracker.data.local.project.Project
         entity = Project::class, parentColumns = ["id"], childColumns = ["projectId"],
         onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
 
+    ),
+    ForeignKey(
+        entity = User::class, parentColumns = ["id"], childColumns = ["userId"],
+        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
     )
 ])
 data class Group(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val userId: Int,
-    val projectId: Int
+    val userId: String, // ForeignKey
+    val projectId: Int // ForeignKey
 )
