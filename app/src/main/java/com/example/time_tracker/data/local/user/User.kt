@@ -8,17 +8,12 @@ import com.example.time_tracker.data.local.role.Role
 /**
  * @author bybuss
  */
-@Entity(tableName = "users", foreignKeys = [
-    ForeignKey(
-        entity = Role::class, parentColumns = ["id"], childColumns = ["roleId"],
-        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
-    )
-])
+@Entity(tableName = "users")
 data class User(
     @PrimaryKey(autoGenerate = false) val id: String,
     val firstName: String,
     val lastName: String,
-    val roleId: Int, // ForeignKey
+    val roleId: Int, // ForeignKey ✅
     val email: String,
     val isEmailConfirmed: Boolean = false,
     val registeredAt: String,

@@ -1,4 +1,4 @@
-package com.example.time_tracker.data.local.user_org
+package com.example.time_tracker.data.local.userOrg
 
 import com.example.time_tracker.base.BaseRepository
 

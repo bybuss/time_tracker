@@ -17,10 +17,10 @@ import com.example.time_tracker.data.local.task.Task
 import com.example.time_tracker.data.local.task.TaskDao
 import com.example.time_tracker.data.local.user.User
 import com.example.time_tracker.data.local.user.UserDao
-import com.example.time_tracker.data.local.user_org.UserOrg
-import com.example.time_tracker.data.local.user_org.UserOrgDao
-import com.example.time_tracker.data.local.user_task.UserTask
-import com.example.time_tracker.data.local.user_task.UserTaskDao
+import com.example.time_tracker.data.local.userOrg.UserOrg
+import com.example.time_tracker.data.local.userOrg.UserOrgDao
+import com.example.time_tracker.data.local.userTask.UserTask
+import com.example.time_tracker.data.local.userTask.UserTaskDao
 
 /**
  * @author bybuss

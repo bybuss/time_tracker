@@ -2,7 +2,9 @@ package com.example.time_tracker.data.local.task
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.time_tracker.base.BaseDao
+import com.example.time_tracker.data.local.relations.userTask.TaskWithUsers
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import kotlinx.coroutines.flow.Flow
@@ -27,4 +29,8 @@ interface TaskDao: BaseDao<Task> {
 
     @Query("SELECT * FROM tasks")
     fun getAllTasks(): Flow<List<Task>>
+
+    @Transaction
+    @Query("SELECT * FROM users")
+    fun getAllTasksWithUsers(): Flow<List<TaskWithUsers>>
 }
