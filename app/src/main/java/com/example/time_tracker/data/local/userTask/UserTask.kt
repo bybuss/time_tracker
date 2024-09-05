@@ -2,6 +2,7 @@ package com.example.time_tracker.data.local.userTask
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.time_tracker.data.local.task.Task
 import com.example.time_tracker.data.local.user.User
@@ -9,7 +10,10 @@ import com.example.time_tracker.data.local.user.User
 /**
  * @author bybuss
  */
-@Entity(tableName = "users_tasks", primaryKeys = ["task_id", "user_id"])
+@Entity(
+    tableName = "users_tasks",
+    indices = [Index(value = ["taskId", "userId"], unique = true)]
+)
 data class UserTask(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val githubData: String,

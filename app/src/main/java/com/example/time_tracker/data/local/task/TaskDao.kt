@@ -31,6 +31,6 @@ interface TaskDao: BaseDao<Task> {
     fun getAllTasks(): Flow<List<Task>>
 
     @Transaction
-    @Query("SELECT * FROM users")
+    @Query("SELECT * FROM tasks")
     fun getAllTasksWithUsers(): Flow<List<TaskWithUsers>>
 }
