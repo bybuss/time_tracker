@@ -2,14 +2,16 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.time_tracker.data.local.group.GroupRepository
 import com.example.time_tracker.data.local.organization.OrganizationRepository
 import com.example.time_tracker.data.local.project.ProjectRepository
 import com.example.time_tracker.data.local.role.RoleRepository
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.user.UserRepository
+import com.example.time_tracker.data.local.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.userTask.UserTaskRepository
 import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -33,6 +35,9 @@ class SignUpViewModel(
     private val organizationRepository: OrganizationRepository,
     private val projectRepository: ProjectRepository,
     private val userRepository: UserRepository,
+    private val userOrgRepository: UserOrgRepository,
+    private val userTaskRepository: UserTaskRepository,
+    private val groupRepository: GroupRepository
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -394,6 +399,90 @@ class SignUpViewModel(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(taskRepository.getAllTasksWithUsers().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllUsersWithTasksFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(userRepository.getAllUsersWithTasks().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllUsersWithOrganizationsFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(userRepository.getAllUsersWithOrganizations().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllOrganizationsWithUsersFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(organizationRepository.getAllOrganizationsWithUsers().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllUserOrgFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+               withTimeout(TIMEOUT_MILLIS) {
+                   SignUpUiState.Success(userOrgRepository.getAllUserOrg().first())
+               }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllUserTaskFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+               withTimeout(TIMEOUT_MILLIS) {
+                   SignUpUiState.Success(userTaskRepository.getAllUserTask().first())
+               }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+    fun getAllGroupsWithTasksFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(groupRepository.getAllGroupsWithTasks().first())
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")

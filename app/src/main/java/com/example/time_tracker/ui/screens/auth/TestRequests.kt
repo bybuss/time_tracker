@@ -108,7 +108,7 @@ fun TestButtonsScreen() {
                     name = "zalupa",
                     description = "slona",
                     isDone = false,
-                    assignerId = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                    assignerId = "799413a7-b9c0-4d5a-9366-935442838caa",
                     color = "#FF1A1A",
                     duration = 720012,
                     endDate = null,
@@ -117,7 +117,7 @@ fun TestButtonsScreen() {
                     groupId = null,
                     assignees = listOf(
                         mapOf(
-                            "id" to "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                            "id" to "799413a7-b9c0-4d5a-9366-935442838caa",
                             "organizationId" to 1
                         )
                     )
@@ -127,7 +127,7 @@ fun TestButtonsScreen() {
         },
         ButtonAction("Get All Full Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getAllFullTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
+                signUpViewModel.getAllFullTasksByAssignerId("799413a7-b9c0-4d5a-9366-935442838caa")
             }
             showDialog = true
         },
@@ -139,7 +139,7 @@ fun TestButtonsScreen() {
         },
         ButtonAction("Get All Simple Tasks By Assigner Id") {
             coroutineScope.launch {
-                signUpViewModel.getAllSimpleTasksByAssignerId("96b3d5fd-523c-45e6-9002-66d50902bfc4")
+                signUpViewModel.getAllSimpleTasksByAssignerId("799413a7-b9c0-4d5a-9366-935442838caa")
             }
             showDialog = true
         },
@@ -152,7 +152,7 @@ fun TestButtonsScreen() {
         ButtonAction("Request Change Password") {
             coroutineScope.launch {
                 signUpViewModel.requestChangePassword(
-                    id = "96b3d5fd-523c-45e6-9002-66d50902bfc4",
+                    id = "799413a7-b9c0-4d5a-9366-935442838caa",
                     firstName = "eblo",
                     lastName ="slona",
                     email = "babakapa729@gmail.com",
@@ -201,6 +201,42 @@ fun TestButtonsScreen() {
         ButtonAction("Get All Tasks With Users From Room") {
             coroutineScope.launch {
                 signUpViewModel.getAllTasksWithUsersFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All Users With Tasks From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllUsersWithTasksFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All Users With Organizations From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllUsersWithOrganizationsFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All Organizations With Users From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllOrganizationsWithUsersFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All User-Organization Links From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllUserOrgFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All User-Task Links From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllUserTaskFromRoom()
+            }
+            showDialog = true
+        },
+        ButtonAction("Get All Groups With Tasks From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllGroupsWithTasksFromRoom()
             }
             showDialog = true
         },

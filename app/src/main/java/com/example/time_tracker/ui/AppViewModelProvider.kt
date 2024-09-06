@@ -24,6 +24,9 @@ object AppViewModelProvider {
                 container.organizationRepository,
                 container.projectRepository,
                 container.userRepository,
+                container.userOrgRepository,
+                container.userTaskRepository,
+                container.groupRepository
             )
         }
 

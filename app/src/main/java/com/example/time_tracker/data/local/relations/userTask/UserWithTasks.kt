@@ -16,7 +16,11 @@ data class UserWithTasks (
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
-        associateBy = Junction(UserTask::class)
+        associateBy = Junction(
+            value = UserTask::class,
+            parentColumn = "userId",
+            entityColumn = "taskId"
+        )
     )
     val tasks: List<Task>
 )

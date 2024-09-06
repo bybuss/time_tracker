@@ -5,6 +5,8 @@ import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.data.local.AppDatabase
+import com.example.time_tracker.data.local.group.GroupRepository
+import com.example.time_tracker.data.local.group.GroupRepositoryImpl
 import com.example.time_tracker.data.local.organization.OrganizationRepository
 import com.example.time_tracker.data.local.organization.OrganizationRepositoryImpl
 import com.example.time_tracker.data.local.project.ProjectRepository
@@ -15,6 +17,10 @@ import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.task.TaskRepositoryImpl
 import com.example.time_tracker.data.local.user.UserRepository
 import com.example.time_tracker.data.local.user.UserRepositoryImpl
+import com.example.time_tracker.data.local.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.userOrg.UserOrgRepositoryImpl
+import com.example.time_tracker.data.local.userTask.UserTaskRepository
+import com.example.time_tracker.data.local.userTask.UserTaskRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
 import com.example.time_tracker.data.network.TokenStoreRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
@@ -39,6 +45,9 @@ interface AppContainer {
     val organizationRepository: OrganizationRepository
     val projectRepository: ProjectRepository
     val userRepository: UserRepository
+    val userOrgRepository: UserOrgRepository
+    val userTaskRepository: UserTaskRepository
+    val groupRepository: GroupRepository
 }
 
 class AppContainerImpl(private val context: Context): AppContainer {
@@ -49,7 +58,6 @@ class AppContainerImpl(private val context: Context): AppContainer {
     override val tokenStoreRepository: TokenStoreRepository by lazy {
         TokenStoreRepository(context)
     }
-
     private val accessToken = runBlocking {
         tokenStoreRepository.getAccessToken().first()
     }
@@ -68,6 +76,15 @@ class AppContainerImpl(private val context: Context): AppContainer {
     }
     override val userRepository: UserRepository by lazy {
         UserRepositoryImpl(AppDatabase.getDatabase(context).userDao())
+    }
+    override val userOrgRepository: UserOrgRepository by lazy {
+        UserOrgRepositoryImpl(AppDatabase.getDatabase(context).userOrgDao())
+    }
+    override val userTaskRepository: UserTaskRepository by lazy {
+        UserTaskRepositoryImpl(AppDatabase.getDatabase(context).userTaskDao())
+    }
+    override val groupRepository: GroupRepository by lazy {
+        GroupRepositoryImpl(AppDatabase.getDatabase(context).groupDao())
     }
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -95,7 +112,10 @@ class AppContainerImpl(private val context: Context): AppContainer {
             roleRepository,
             organizationRepository,
             projectRepository,
-            userRepository
+            userRepository,
+            userOrgRepository,
+            userTaskRepository,
+            groupRepository
         )
     }
 

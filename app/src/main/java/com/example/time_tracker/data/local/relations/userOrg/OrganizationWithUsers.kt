@@ -15,7 +15,11 @@ data class OrganizationWithUsers (
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
-        associateBy = Junction(UserOrg::class)
+        associateBy = Junction(
+            value = UserOrg::class,
+            parentColumn = "orgId",
+            entityColumn = "userId"
+        )
     )
     val users: List<User>
 )

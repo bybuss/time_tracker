@@ -17,6 +17,7 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTaskByIdQuery
 import com.example.time_tracker.GetSimpleTaskByIdQuery
+import com.example.time_tracker.data.local.group.GroupRepository
 import com.example.time_tracker.data.local.organization.Organization
 import com.example.time_tracker.data.local.organization.OrganizationRepository
 import com.example.time_tracker.data.local.project.Project
@@ -27,6 +28,8 @@ import com.example.time_tracker.data.local.task.Task
 import com.example.time_tracker.data.local.task.TaskRepository
 import com.example.time_tracker.data.local.user.User
 import com.example.time_tracker.data.local.user.UserRepository
+import com.example.time_tracker.data.local.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.userTask.UserTaskRepository
 import com.example.time_tracker.domain.model.AccessToken
 import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
@@ -45,6 +48,9 @@ class GraphQLRepository(
     private val organizationRepository: OrganizationRepository,
     private val projectRepository: ProjectRepository,
     private val userRepository: UserRepository,
+    private val userOrgRepository: UserOrgRepository,
+    private val userTaskRepository: UserTaskRepository,
+    private val groupRepository: GroupRepository,
 ): GraphQLClient {
     override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
