@@ -388,4 +388,18 @@ class SignUpViewModel(
             }
         }
     }
+    fun getAllTasksWithUsersFromRoom() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(taskRepository.getAllTasksWithUsers().first())
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
 }

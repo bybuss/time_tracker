@@ -198,6 +198,12 @@ fun TestButtonsScreen() {
             }
             showDialog = true
         },
+        ButtonAction("Get All Tasks With Users From Room") {
+            coroutineScope.launch {
+                signUpViewModel.getAllTasksWithUsersFromRoom()
+            }
+            showDialog = true
+        },
     )
 
     Column(

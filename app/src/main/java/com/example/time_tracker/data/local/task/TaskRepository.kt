@@ -1,6 +1,7 @@
 package com.example.time_tracker.data.local.task
 
 import com.example.time_tracker.base.BaseRepository
+import com.example.time_tracker.data.local.relations.userTask.TaskWithUsers
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,6 @@ interface TaskRepository: BaseRepository<Task> {
     fun getSimpleTasksById(id: Int): Flow<List<SimpleTask>>
 
     fun getAllTasks(): Flow<List<Task>>
+
+    fun getAllTasksWithUsers(): Flow<List<TaskWithUsers>>
 }

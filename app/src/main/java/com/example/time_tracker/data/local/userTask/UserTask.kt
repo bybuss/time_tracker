@@ -11,7 +11,7 @@ import com.example.time_tracker.data.local.user.User
  * @author bybuss
  */
 @Entity(
-    tableName = "users_tasks",
+    tableName = "user_task",
     indices = [Index(value = ["taskId", "userId"], unique = true)]
 )
 data class UserTask(

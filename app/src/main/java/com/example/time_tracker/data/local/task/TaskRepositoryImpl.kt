@@ -1,6 +1,7 @@
 package com.example.time_tracker.data.local.task
 
 import com.example.time_tracker.base.BaseRepositoryImpl
+import com.example.time_tracker.data.local.relations.userTask.TaskWithUsers
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import kotlinx.coroutines.flow.Flow
@@ -25,4 +26,7 @@ class TaskRepositoryImpl(
 
     override fun getAllTasks(): Flow<List<Task>>
         = taskDao.getAllTasks()
+
+    override fun getAllTasksWithUsers(): Flow<List<TaskWithUsers>>
+        = taskDao.getAllTasksWithUsers()
 }
