@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.example.time_tracker.BuildConfig
 import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
 import com.example.time_tracker.data.local.room.AppDatabase
 import com.example.time_tracker.data.local.room.group.GroupRepository
@@ -23,7 +24,6 @@ import com.example.time_tracker.data.local.room.userOrg.UserOrgRepositoryImpl
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
-import com.example.time_tracker.data.network.TokenDataSourceRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
 import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +54,7 @@ interface AppContainer {
 class AppContainerImpl(private val context: Context): AppContainer {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val baseUrl = "http://31.128.45.95:8000/graphql"
+    private val baseUrl: String = BuildConfig.BASE_API_URL
 
     override val tokenDataSource: TokenDataSourceImpl by lazy {
         TokenDataSourceImpl(context)

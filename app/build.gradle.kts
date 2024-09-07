@@ -32,6 +32,9 @@ android {
     }
 
     buildTypes {
+        all {
+            buildConfigField("String", "BASE_API_URL", "\"${project.findProperty("BASE_API_URL")}\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -49,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
