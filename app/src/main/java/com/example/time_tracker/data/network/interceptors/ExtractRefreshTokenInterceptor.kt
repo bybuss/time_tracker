@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.network.interceptors
 
-import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
+import com.example.time_tracker.data.local.dataStore.TokenDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
@@ -10,7 +10,7 @@ import okhttp3.Response
  * @author bybuss
  */
 class ExtractRefreshTokenInterceptor (
-    private val tokenDataSource: TokenDataSourceImpl,
+    private val tokenDataSource: TokenDataSource,
     private val coroutineScope: CoroutineScope
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

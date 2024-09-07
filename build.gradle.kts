@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath("com.apollographql.apollo3:apollo-gradle-plugin:3.8.2")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.50")
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     }
 }
 

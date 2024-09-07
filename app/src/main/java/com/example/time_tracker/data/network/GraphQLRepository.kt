@@ -17,7 +17,7 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTaskByIdQuery
 import com.example.time_tracker.GetSimpleTaskByIdQuery
-import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
+import com.example.time_tracker.data.local.dataStore.TokenDataSource
 import com.example.time_tracker.data.local.room.group.GroupRepository
 import com.example.time_tracker.data.local.room.organization.Organization
 import com.example.time_tracker.data.local.room.organization.OrganizationRepository
@@ -43,7 +43,7 @@ import kotlinx.serialization.json.Json
  */
 class GraphQLRepository(
     private val apolloClient: ApolloClient,
-    private val tokenDataSource: TokenDataSourceImpl,
+    private val tokenDataSource: TokenDataSource,
     private val taskRepository: TaskRepository,
     private val roleRepository: RoleRepository,
     private val organizationRepository: OrganizationRepository,

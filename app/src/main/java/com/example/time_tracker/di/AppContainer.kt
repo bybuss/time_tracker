@@ -4,7 +4,9 @@ import android.content.Context
 import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import android.util.Log
 import com.example.time_tracker.BuildConfig
+import com.example.time_tracker.data.local.dataStore.TokenDataSource
 import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
 import com.example.time_tracker.data.local.room.AppDatabase
 import com.example.time_tracker.data.local.room.group.GroupRepository
@@ -38,7 +40,7 @@ import okhttp3.OkHttpClient
 */
 
 interface AppContainer {
-    val tokenDataSource: TokenDataSourceImpl
+    val tokenDataSource: TokenDataSource
     val graphQLRepository: GraphQLRepository
 
     val taskRepository: TaskRepository
@@ -56,7 +58,12 @@ class AppContainerImpl(private val context: Context): AppContainer {
 
     private val baseUrl: String = BuildConfig.BASE_API_URL
 
-    override val tokenDataSource: TokenDataSourceImpl by lazy {
+    init {
+        Log.d("AppContainer", "baseUrl: $baseUrl")
+    }
+
+
+    override val tokenDataSource: TokenDataSource by lazy {
         TokenDataSourceImpl(context)
     }
     private val accessToken = runBlocking {

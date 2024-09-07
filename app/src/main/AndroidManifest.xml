@@ -50,5 +50,9 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="BASE_API_URL"
+            android:value="${BASE_API_URL}"/>
+
     </application>
 </manifest>

@@ -6,6 +6,7 @@ plugins {
     id("com.apollographql.apollo3")
     id("kotlinx-serialization")
     id("com.google.devtools.ksp") version "2.0.0-1.0.21"
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 apollo {
@@ -32,9 +33,6 @@ android {
     }
 
     buildTypes {
-        all {
-            buildConfigField("String", "BASE_API_URL", "\"${project.findProperty("BASE_API_URL")}\"")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -96,7 +94,7 @@ dependencies {
 
     // Networking with Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
@@ -109,7 +107,7 @@ dependencies {
 
     // Json converter
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.0")
