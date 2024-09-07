@@ -50,6 +50,7 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun userOrgDao(): UserOrgDao
     abstract fun userTaskDao(): UserTaskDao
 
+    //TODO: УДАЛИТЬ ПОТОМ companion object, ЕСТЬ ПРОВАЙДЕР ИНСТАНСА БД
     companion object {
         @Volatile
         private var Instance: AppDatabase? = null
