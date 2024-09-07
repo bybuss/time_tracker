@@ -17,19 +17,20 @@ import com.example.time_tracker.RequestChangePasswordQuery
 import com.example.time_tracker.ChangePasswordMutation
 import com.example.time_tracker.GetFullTaskByIdQuery
 import com.example.time_tracker.GetSimpleTaskByIdQuery
-import com.example.time_tracker.data.local.group.GroupRepository
-import com.example.time_tracker.data.local.organization.Organization
-import com.example.time_tracker.data.local.organization.OrganizationRepository
-import com.example.time_tracker.data.local.project.Project
-import com.example.time_tracker.data.local.project.ProjectRepository
-import com.example.time_tracker.data.local.role.Role
-import com.example.time_tracker.data.local.role.RoleRepository
-import com.example.time_tracker.data.local.task.Task
-import com.example.time_tracker.data.local.task.TaskRepository
-import com.example.time_tracker.data.local.user.User
-import com.example.time_tracker.data.local.user.UserRepository
-import com.example.time_tracker.data.local.userOrg.UserOrgRepository
-import com.example.time_tracker.data.local.userTask.UserTaskRepository
+import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
+import com.example.time_tracker.data.local.room.group.GroupRepository
+import com.example.time_tracker.data.local.room.organization.Organization
+import com.example.time_tracker.data.local.room.organization.OrganizationRepository
+import com.example.time_tracker.data.local.room.project.Project
+import com.example.time_tracker.data.local.room.project.ProjectRepository
+import com.example.time_tracker.data.local.room.role.Role
+import com.example.time_tracker.data.local.room.role.RoleRepository
+import com.example.time_tracker.data.local.room.task.Task
+import com.example.time_tracker.data.local.room.task.TaskRepository
+import com.example.time_tracker.data.local.room.user.User
+import com.example.time_tracker.data.local.room.user.UserRepository
+import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.domain.model.AccessToken
 import com.example.time_tracker.domain.model.AuthUserResponse
 import com.example.time_tracker.domain.model.FullTask
@@ -42,7 +43,7 @@ import kotlinx.serialization.json.Json
  */
 class GraphQLRepository(
     private val apolloClient: ApolloClient,
-    private val tokenStoreRepository: TokenStoreRepository,
+    private val tokenDataSource: TokenDataSourceImpl,
     private val taskRepository: TaskRepository,
     private val roleRepository: RoleRepository,
     private val organizationRepository: OrganizationRepository,
@@ -125,8 +126,7 @@ class GraphQLRepository(
 
         return userId
     }
-// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА
-//  НЕ НУЖНА
+
     override suspend fun authUser(email: String, password: String): AccessToken {
         val response = apolloClient.query(AuthUserQuery(email, password))
             .addHttpHeader("Access-Token-Request", "true")
@@ -140,26 +140,23 @@ class GraphQLRepository(
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
 
-        tokenStoreRepository.saveAccessToken(accessToken.token)
+        tokenDataSource.saveAccessToken(accessToken.token)
         Log.d("TokenStoreRepository", "saveAccessToken from authUser: ${accessToken.token}")
-        tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
+        tokenDataSource.saveAccessTokenExpiresTime(accessToken.expiresIn)
         Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from authUser: ${accessToken.expiresIn}")
-        tokenStoreRepository.saveAccessTokenCreatedTime(accessToken.createdAt)
+        tokenDataSource.saveAccessTokenCreatedTime(accessToken.createdAt)
         Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from authUser: ${accessToken.createdAt}")
 
         if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty())
             throw ApolloException("Токен не был получен!")
 
-// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ,
-//  ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,
             createdAt = accessToken.createdAt
         )
     }
-// FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК НЕЧЕГО БУДЕТ ВОЗВРАЩАТЬ, ОТЛАДКА
-//  НЕ НУЖНА
+
     override suspend fun refreshToken(): AccessToken {
         val response = apolloClient.query(RefreshTokenQuery())
             .addHttpHeader("Refresh-Token-Request", "true")
@@ -173,19 +170,17 @@ class GraphQLRepository(
 
         val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
 
-    tokenStoreRepository.saveAccessToken(accessToken.token)
+    tokenDataSource.saveAccessToken(accessToken.token)
     Log.d("TokenStoreRepository", "saveAccessToken from refreshToken: ${accessToken.token}")
-    tokenStoreRepository.saveAccessTokenExpiresTime(accessToken.expiresIn)
+    tokenDataSource.saveAccessTokenExpiresTime(accessToken.expiresIn)
     Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.expiresIn}")
-    tokenStoreRepository.saveAccessTokenCreatedTime(accessToken.createdAt)
+    tokenDataSource.saveAccessTokenCreatedTime(accessToken.createdAt)
     Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.createdAt}")
 
         if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
             throw ApolloException("Токен не был получен!")
         }
 
-// FIXME: УДАЛИТЬ return (НА ФИНАЛЬНОЙ СТАДИИ), ТК ОСНОВНОЙ ФУНКЦОНАЛ С СОХРАНЕНИЕМ ТОКЕНА ГОТОВ,
-//  ОТЛАДКА НЕ НУЖНА
         return AccessToken(
             token = accessToken.token,
             expiresIn = accessToken.expiresIn,
@@ -216,8 +211,6 @@ class GraphQLRepository(
         return projectId
     }
 
-    // FIXME: УБРАТЬ ТИП ВОЗРАЩАЕМЫХ ДАННЫХ (НА ФИНАЛЬНОЙ СТАДИИ), ТК ИД НЕ БУДЕТ ВОЗВРАЩАТЬСЯ, А
-    //  СОХРАНЯТЬСЯ ЛОКАЛЬНО
     override suspend fun addTask(
         name: String,
         description: String,
@@ -270,8 +263,6 @@ class GraphQLRepository(
             )
         )
 
-        //TODO: НА МОМЕНТЕ СОХРАНЕНИЯ ЭТОГО ТАСКА И ЛОКАЛЬНО НЕОБХОДИМО БУДЕТ ПРИСВОИТЬ ЭТОТ ЖЕ ID
-        // => НЕ НУЖНО БУДЕТ ВОЗВРАЩАТЬ, А СОХРАНЯТЬ ЛОКАЛЬНО
         return taskId
     }
 

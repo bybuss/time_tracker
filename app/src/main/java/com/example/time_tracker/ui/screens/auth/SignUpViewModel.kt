@@ -2,14 +2,14 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.time_tracker.data.local.group.GroupRepository
-import com.example.time_tracker.data.local.organization.OrganizationRepository
-import com.example.time_tracker.data.local.project.ProjectRepository
-import com.example.time_tracker.data.local.role.RoleRepository
-import com.example.time_tracker.data.local.task.TaskRepository
-import com.example.time_tracker.data.local.user.UserRepository
-import com.example.time_tracker.data.local.userOrg.UserOrgRepository
-import com.example.time_tracker.data.local.userTask.UserTaskRepository
+import com.example.time_tracker.data.local.room.group.GroupRepository
+import com.example.time_tracker.data.local.room.organization.OrganizationRepository
+import com.example.time_tracker.data.local.room.project.ProjectRepository
+import com.example.time_tracker.data.local.room.role.RoleRepository
+import com.example.time_tracker.data.local.room.task.TaskRepository
+import com.example.time_tracker.data.local.room.user.UserRepository
+import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.data.network.GraphQLRepository
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow

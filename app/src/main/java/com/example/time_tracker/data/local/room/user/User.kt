@@ -1,0 +1,27 @@
+package com.example.time_tracker.data.local.room.user
+
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import com.example.time_tracker.data.local.room.role.Role
+
+/**
+ * @author bybuss
+ */
+@Entity(tableName = "users")
+data class User(
+    @PrimaryKey(autoGenerate = false) val id: String,
+    val firstName: String,
+    val lastName: String,
+    val roleId: Int, // ForeignKey ✅
+    val email: String,
+    val isEmailConfirmed: Boolean = false,
+    val registeredAt: String,
+    val hashedPassword: String,
+    val isActive: Boolean = true,
+    val isVerified: Boolean = false,
+    val tgId: String? = null,
+    val tgSettings: String? = null,
+    val pathFile: String? = null,
+    val githubName: String? = null,
+)

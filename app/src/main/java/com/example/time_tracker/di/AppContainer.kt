@@ -4,25 +4,26 @@ import android.content.Context
 import android.provider.Settings
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
-import com.example.time_tracker.data.local.AppDatabase
-import com.example.time_tracker.data.local.group.GroupRepository
-import com.example.time_tracker.data.local.group.GroupRepositoryImpl
-import com.example.time_tracker.data.local.organization.OrganizationRepository
-import com.example.time_tracker.data.local.organization.OrganizationRepositoryImpl
-import com.example.time_tracker.data.local.project.ProjectRepository
-import com.example.time_tracker.data.local.project.ProjectRepositoryImpl
-import com.example.time_tracker.data.local.role.RoleRepository
-import com.example.time_tracker.data.local.role.RoleRepositoryImpl
-import com.example.time_tracker.data.local.task.TaskRepository
-import com.example.time_tracker.data.local.task.TaskRepositoryImpl
-import com.example.time_tracker.data.local.user.UserRepository
-import com.example.time_tracker.data.local.user.UserRepositoryImpl
-import com.example.time_tracker.data.local.userOrg.UserOrgRepository
-import com.example.time_tracker.data.local.userOrg.UserOrgRepositoryImpl
-import com.example.time_tracker.data.local.userTask.UserTaskRepository
-import com.example.time_tracker.data.local.userTask.UserTaskRepositoryImpl
+import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
+import com.example.time_tracker.data.local.room.AppDatabase
+import com.example.time_tracker.data.local.room.group.GroupRepository
+import com.example.time_tracker.data.local.room.group.GroupRepositoryImpl
+import com.example.time_tracker.data.local.room.organization.OrganizationRepository
+import com.example.time_tracker.data.local.room.organization.OrganizationRepositoryImpl
+import com.example.time_tracker.data.local.room.project.ProjectRepository
+import com.example.time_tracker.data.local.room.project.ProjectRepositoryImpl
+import com.example.time_tracker.data.local.room.role.RoleRepository
+import com.example.time_tracker.data.local.room.role.RoleRepositoryImpl
+import com.example.time_tracker.data.local.room.task.TaskRepository
+import com.example.time_tracker.data.local.room.task.TaskRepositoryImpl
+import com.example.time_tracker.data.local.room.user.UserRepository
+import com.example.time_tracker.data.local.room.user.UserRepositoryImpl
+import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
+import com.example.time_tracker.data.local.room.userOrg.UserOrgRepositoryImpl
+import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
+import com.example.time_tracker.data.local.room.userTask.UserTaskRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
-import com.example.time_tracker.data.network.TokenStoreRepository
+import com.example.time_tracker.data.network.TokenDataSourceRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
 import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ import okhttp3.OkHttpClient
 */
 
 interface AppContainer {
-    val tokenStoreRepository: TokenStoreRepository
+    val tokenDataSource: TokenDataSourceImpl
     val graphQLRepository: GraphQLRepository
 
     val taskRepository: TaskRepository
@@ -55,11 +56,11 @@ class AppContainerImpl(private val context: Context): AppContainer {
 
     private val baseUrl = "http://31.128.45.95:8000/graphql"
 
-    override val tokenStoreRepository: TokenStoreRepository by lazy {
-        TokenStoreRepository(context)
+    override val tokenDataSource: TokenDataSourceImpl by lazy {
+        TokenDataSourceImpl(context)
     }
     private val accessToken = runBlocking {
-        tokenStoreRepository.getAccessToken().first()
+        tokenDataSource.getAccessToken().first()
     }
 
     override val taskRepository: TaskRepository by lazy {
@@ -88,8 +89,8 @@ class AppContainerImpl(private val context: Context): AppContainer {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(ExtractRefreshTokenInterceptor(tokenStoreRepository, coroutineScope))
-        .addInterceptor(AddRefreshTokenInterceptor(tokenStoreRepository))
+        .addInterceptor(ExtractRefreshTokenInterceptor(tokenDataSource, coroutineScope))
+        .addInterceptor(AddRefreshTokenInterceptor(tokenDataSource))
         .addInterceptor(Interceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", accessToken)
@@ -107,7 +108,7 @@ class AppContainerImpl(private val context: Context): AppContainer {
     override val graphQLRepository: GraphQLRepository by lazy {
         GraphQLRepository(
             apolloClient,
-            tokenStoreRepository,
+            tokenDataSource,
             taskRepository,
             roleRepository,
             organizationRepository,
