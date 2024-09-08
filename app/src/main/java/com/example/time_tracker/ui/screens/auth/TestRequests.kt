@@ -22,8 +22,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.time_tracker.ui.AppViewModelProvider
 import kotlinx.coroutines.launch
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -32,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.time_tracker.domain.model.AdminRole
 import com.example.time_tracker.domain.model.ButtonAction
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +39,9 @@ import kotlinx.coroutines.Dispatchers
  * @author bybuss
  */
 @Composable
-fun TestButtonsScreen(signUpViewModel: SignUpViewModel) {
+fun TestButtonsScreen() {
     //val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val signUpViewModel: SignUpViewModel = hiltViewModel()
     val uiState by signUpViewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope { Dispatchers.IO }
     var showDialog by remember { mutableStateOf(false) }

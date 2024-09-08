@@ -1,8 +1,6 @@
 package com.example.time_tracker.data.local.room
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.time_tracker.data.local.room.group.Group
@@ -40,7 +38,7 @@ import com.example.time_tracker.data.local.room.userTask.UserTaskDao
     exportSchema = false
 )
 @TypeConverters(Converters::class)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase(): RoomDatabase() {
     abstract fun groupDao(): GroupDao
     abstract fun organizationDao(): OrganizationDao
     abstract fun projectDao(): ProjectDao
@@ -49,20 +47,4 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun userOrgDao(): UserOrgDao
     abstract fun userTaskDao(): UserTaskDao
-
-    //TODO: УДАЛИТЬ ПОТОМ companion object, ЕСТЬ ПРОВАЙДЕР ИНСТАНСА БД
-    companion object {
-        @Volatile
-        private var Instance: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, AppDatabase::class.java, "time_tracker")
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
-                    .also { Instance = it }
-            }
-        }
-    }
 }

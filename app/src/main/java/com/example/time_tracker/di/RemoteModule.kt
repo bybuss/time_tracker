@@ -1,6 +1,7 @@
 package com.example.time_tracker.di
 
 import android.content.Context
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.BuildConfig
