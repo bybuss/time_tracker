@@ -7,7 +7,6 @@ import com.example.time_tracker.data.local.dataStore.TokenDataSourceImpl
 import com.example.time_tracker.data.local.room.group.GroupDao
 import com.example.time_tracker.data.local.room.group.GroupRepository
 import com.example.time_tracker.data.local.room.group.GroupRepositoryImpl
-import com.example.time_tracker.data.local.room.organization.Organization
 import com.example.time_tracker.data.local.room.organization.OrganizationDao
 import com.example.time_tracker.data.local.room.organization.OrganizationRepository
 import com.example.time_tracker.data.local.room.organization.OrganizationRepositoryImpl
@@ -29,7 +28,7 @@ import com.example.time_tracker.data.local.room.userOrg.UserOrgRepositoryImpl
 import com.example.time_tracker.data.local.room.userTask.UserTaskDao
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepositoryImpl
-import com.example.time_tracker.data.network.GraphQLRepository
+import com.example.time_tracker.data.network.GraphQLClientImpl
 import com.example.time_tracker.domain.network.GraphQLClient
 import dagger.Module
 import dagger.Provides
@@ -52,52 +51,39 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTaskRepository(@ApplicationContext context: Context, taskDao: TaskDao): TaskRepository
-        = TaskRepositoryImpl(taskDao)
+    fun provideTaskRepository(taskDao: TaskDao): TaskRepository = TaskRepositoryImpl(taskDao)
 
     @Provides
     @Singleton
-    fun provideRoleRepository(@ApplicationContext context: Context, roleDao: RoleDao): RoleRepository
-        = RoleRepositoryImpl(roleDao)
+    fun provideRoleRepository(roleDao: RoleDao): RoleRepository = RoleRepositoryImpl(roleDao)
 
     @Provides
     @Singleton
-    fun provideOrganizationRepository(
-        @ApplicationContext context: Context,
-        organizationDao: OrganizationDao
-    ): OrganizationRepository = OrganizationRepositoryImpl(organizationDao)
+    fun provideOrganizationRepository(organizationDao: OrganizationDao): OrganizationRepository
+        = OrganizationRepositoryImpl(organizationDao)
 
     @Provides
     @Singleton
-    fun provideProjectRepository(
-        @ApplicationContext context: Context,
-        projectDao: ProjectDao
-    ): ProjectRepository = ProjectRepositoryImpl(projectDao)
+    fun provideProjectRepository(projectDao: ProjectDao): ProjectRepository
+        = ProjectRepositoryImpl(projectDao)
 
     @Provides
     @Singleton
-    fun provideUserRepository(@ApplicationContext context: Context, userDao: UserDao): UserRepository
-        = UserRepositoryImpl(userDao)
+    fun provideUserRepository(userDao: UserDao): UserRepository = UserRepositoryImpl(userDao)
 
     @Provides
     @Singleton
-    fun provideUserOrgRepository(
-        @ApplicationContext context: Context,
-        userOrgDao: UserOrgDao
-    ): UserOrgRepository = UserOrgRepositoryImpl(userOrgDao)
+    fun provideUserOrgRepository(userOrgDao: UserOrgDao): UserOrgRepository
+        = UserOrgRepositoryImpl(userOrgDao)
 
     @Provides
     @Singleton
-    fun provideUserTaskRepository(
-        @ApplicationContext context: Context,
-        userTaskDao: UserTaskDao
-    ): UserTaskRepository = UserTaskRepositoryImpl(userTaskDao)
+    fun provideUserTaskRepository(userTaskDao: UserTaskDao): UserTaskRepository
+        = UserTaskRepositoryImpl(userTaskDao)
+
     @Provides
     @Singleton
-    fun provideGroupRepository(
-        @ApplicationContext context: Context,
-        groupDao: GroupDao
-    ): GroupRepository = GroupRepositoryImpl(groupDao)
+    fun provideGroupRepository(groupDao: GroupDao): GroupRepository = GroupRepositoryImpl(groupDao)
 
     @Provides
     @Singleton
@@ -114,7 +100,7 @@ object RepositoryModule {
         userTaskRepository: UserTaskRepository,
         groupRepository: GroupRepository,
     ): GraphQLClient {
-        return GraphQLRepository(
+        return GraphQLClientImpl(
             apolloClient,
             //FIXME: УБРАТЬ ЛОКАЛЬНОЕ СОХРАНЕНИЕ ИЗ РЕПОЗИТОРИЯ ДЛЯ АПИ
             tokenDataSource,

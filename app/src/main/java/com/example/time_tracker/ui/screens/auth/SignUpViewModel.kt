@@ -11,6 +11,7 @@ import com.example.time_tracker.data.local.room.user.UserRepository
 import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.domain.network.GraphQLClient
+import com.example.time_tracker.domain.useCase.AddRoleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +42,9 @@ class SignUpViewModel @Inject constructor (
     private val userRepository: UserRepository,
     private val userOrgRepository: UserOrgRepository,
     private val userTaskRepository: UserTaskRepository,
-    private val groupRepository: GroupRepository
+    private val groupRepository: GroupRepository,
+
+    private val addRoleUseCase: AddRoleUseCase
 ): ViewModel() {
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
@@ -61,12 +64,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(
-                        graphQLRepository.addRole(
-                            name,
-                            permissions
-                        )
-                    )
+                    SignUpUiState.Success(addRoleUseCase.addRole(name, permissions))
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")

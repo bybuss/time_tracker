@@ -42,7 +42,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GraphQLRepository @Inject constructor (
+class GraphQLClientImpl @Inject constructor (
     private val apolloClient: ApolloClient,
     //FIXME: УБРАТЬ ЛОКАЛЬНОЕ СОХРАНЕНИЕ ИЗ РЕПОЗИТОРИЯ ДЛЯ АПИ
     private val tokenDataSource: TokenDataSource,
