@@ -18,20 +18,20 @@
 
 ### Светлая тема
 <p align="center">
-  <img src="screenshots/light/main-light.jpg" alt="Главный экран - Светлая тема"/>
-  <img src="screenshots/light/create-task-form-light.jpg" alt="Создание задачи - Светлая тема"/>
-  <img src="screenshots/light/tasks-list-light.jpg" alt="Список задач - Светлая тема"/>
-  <img src="screenshots/light/tasks-list2-light.jpg" alt="Список задач 2 - Светлая тема"/>
-  <img src="screenshots/light/profile-light.jpg" alt="Профиль - Светлая тема"/>
+  <img src="screenshots/light/main-light.jpg" alt="Главный экран - Светлая тема" width="100" />
+  <img src="screenshots/light/create-task-form-light.jpg" alt="Создание задачи - Светлая тема" width="100" />
+  <img src="screenshots/light/tasks-list-light.jpg" alt="Список задач - Светлая тема" width="100" />
+  <img src="screenshots/light/tasks-list2-light.jpg" alt="Список задач 2 - Светлая тема" width="100" />
+  <img src="screenshots/light/profile-light.jpg" alt="Профиль - Светлая тема" width="100" />
 </p>
 
 ### Темная тема
 <p align="center">
-  <img src="screenshots/dark/main-dark.jpg" alt="Главный экран - Темная тема"/>
-  <img src="screenshots/dark/create-task-form-dark.jpg" alt="Создание задачи - Темная тема"/>
-  <img src="screenshots/dark/tasks-list-dark.jpg" alt="Список задач - Темная тема"/>
-  <img src="screenshots/dark/tasks-list2-dark.jpg" alt="Список задач 2 - Темная тема"/>
-  <img src="screenshots/dark/profile-dark.jpg" alt="Профиль - Темная тема"/>
+  <img src="screenshots/dark/main-dark.jpg" alt="Главный экран - Темная тема" width="100" />
+  <img src="screenshots/dark/create-task-form-dark.jpg" alt="Создание задачи - Темная тема" width="100" />
+  <img src="screenshots/dark/tasks-list-dark.jpg" alt="Список задач - Темная тема" width="100" />
+  <img src="screenshots/dark/tasks-list2-dark.jpg" alt="Список задач 2 - Темная тема" width="100" />
+  <img src="screenshots/dark/profile-dark.jpg" alt="Профиль - Темная тема" width="100" />
 </p>
 
 ## Используемые технологии
