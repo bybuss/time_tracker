@@ -28,6 +28,7 @@ import com.example.time_tracker.data.local.room.userTask.UserTaskRepositoryImpl
 import com.example.time_tracker.data.network.GraphQLRepository
 import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInterceptor
 import com.example.time_tracker.data.network.interceptors.AddRefreshTokenInterceptor
+import com.example.time_tracker.domain.network.GraphQLClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -41,7 +42,7 @@ import okhttp3.OkHttpClient
 
 interface AppContainer {
     val tokenDataSource: TokenDataSource
-    val graphQLRepository: GraphQLRepository
+    val graphQLRepository: GraphQLClient
 
     val taskRepository: TaskRepository
     val roleRepository: RoleRepository
@@ -57,11 +58,6 @@ class AppContainerImpl(private val context: Context): AppContainer {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val baseUrl: String = BuildConfig.BASE_API_URL
-
-    init {
-        Log.d("AppContainer", "baseUrl: $baseUrl")
-    }
-
 
     override val tokenDataSource: TokenDataSource by lazy {
         TokenDataSourceImpl(context)
@@ -112,7 +108,7 @@ class AppContainerImpl(private val context: Context): AppContainer {
         .okHttpClient(okHttpClient)
         .build()
 
-    override val graphQLRepository: GraphQLRepository by lazy {
+    override val graphQLRepository: GraphQLClient by lazy {
         GraphQLRepository(
             apolloClient,
             tokenDataSource,

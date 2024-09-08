@@ -11,12 +11,14 @@ import com.example.time_tracker.data.local.room.user.UserRepository
 import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.data.network.GraphQLRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import javax.inject.Inject
 
 /**
  * @author bybuss
@@ -28,8 +30,10 @@ sealed interface SignUpUiState {
     object Loading: SignUpUiState
 }
 
-class SignUpViewModel(
+@HiltViewModel
+class SignUpViewModel @Inject constructor (
     private val graphQLRepository: GraphQLRepository,
+
     private val taskRepository: TaskRepository,
     private val roleRepository: RoleRepository,
     private val organizationRepository: OrganizationRepository,
