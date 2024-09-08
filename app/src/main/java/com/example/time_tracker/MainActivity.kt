@@ -9,15 +9,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.time_tracker.ui.navigation.AppNavigation
+import com.example.time_tracker.ui.screens.auth.SignUpViewModel
 import com.example.time_tracker.ui.screens.auth.TestButtonsScreen
 import com.example.time_tracker.ui.theme.MobileAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAppTheme {
+                val signUpViewModel: SignUpViewModel = hiltViewModel()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -26,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     //AppNavigation()
                     //SignUpScreen()
 //                    AddRoleTestScreen()
-                    TestButtonsScreen()
+                    TestButtonsScreen(signUpViewModel)
                 }
             }
         }

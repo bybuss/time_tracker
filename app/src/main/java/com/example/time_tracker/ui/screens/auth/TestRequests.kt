@@ -40,8 +40,8 @@ import kotlinx.coroutines.Dispatchers
  * @author bybuss
  */
 @Composable
-fun TestButtonsScreen() {
-    val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
+fun TestButtonsScreen(signUpViewModel: SignUpViewModel) {
+    //val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val uiState by signUpViewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope { Dispatchers.IO }
     var showDialog by remember { mutableStateOf(false) }

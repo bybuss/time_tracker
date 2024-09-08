@@ -10,7 +10,7 @@ import com.example.time_tracker.data.local.room.task.TaskRepository
 import com.example.time_tracker.data.local.room.user.UserRepository
 import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
-import com.example.time_tracker.data.network.GraphQLRepository
+import com.example.time_tracker.domain.network.GraphQLClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +32,7 @@ sealed interface SignUpUiState {
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor (
-    private val graphQLRepository: GraphQLRepository,
+    private val graphQLRepository: GraphQLClient,
 
     private val taskRepository: TaskRepository,
     private val roleRepository: RoleRepository,

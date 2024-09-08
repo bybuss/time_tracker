@@ -57,7 +57,7 @@ interface AppContainer {
 class AppContainerImpl(private val context: Context): AppContainer {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val baseUrl: String = BuildConfig.BASE_API_URL
+    private val graphQLUrl: String = "${BuildConfig.BASE_API_URL}/graphql"
 
     override val tokenDataSource: TokenDataSource by lazy {
         TokenDataSourceImpl(context)
@@ -104,7 +104,7 @@ class AppContainerImpl(private val context: Context): AppContainer {
         .build()
 
     private val apolloClient = ApolloClient.Builder()
-        .serverUrl(baseUrl)
+        .serverUrl(graphQLUrl)
         .okHttpClient(okHttpClient)
         .build()
 

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -28,10 +29,12 @@ object RemoteModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = BuildConfig.BASE_API_URL
+    @Named("graphQLUrl")
+    fun provideGraphQLUrl(): String = "${BuildConfig.BASE_API_URL}/graphql"
 
     @Provides
     @Singleton
+    @Named("accessToken")
     fun provideAccessToken(tokenDataSource: TokenDataSource): String {
         return runBlocking {
             tokenDataSource.getAccessToken().first()
@@ -43,8 +46,8 @@ object RemoteModule {
     fun provideOkHttpClient(
         tokenDataSource: TokenDataSource,
         coroutineScope: CoroutineScope,
-        accessToken: String,
-        deviceFingerprint: String
+        @Named("accessToken") accessToken: String,
+        @Named("deviceFingerprint") deviceFingerprint: String
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(ExtractRefreshTokenInterceptor(tokenDataSource, coroutineScope))
@@ -61,9 +64,12 @@ object RemoteModule {
 
     @Provides
     @Singleton
-    fun provideApolloClient(baseUrl: String, okHttpClient: OkHttpClient): ApolloClient {
+    fun provideApolloClient(
+        @Named("graphQLUrl") graphQLUrl: String,
+        okHttpClient: OkHttpClient
+    ): ApolloClient {
         return ApolloClient.Builder()
-            .serverUrl(baseUrl)
+            .serverUrl(graphQLUrl)
             .okHttpClient(okHttpClient)
             .build()
     }

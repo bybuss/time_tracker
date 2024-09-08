@@ -37,12 +37,14 @@ import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
 import com.example.time_tracker.domain.network.GraphQLClient
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 /**
  * @author bybuss
  */
-class GraphQLRepository(
+class GraphQLRepository @Inject constructor (
     private val apolloClient: ApolloClient,
+    //FIXME: УБРАТЬ ЛОКАЛЬНОЕ СОХРАНЕНИЕ ИЗ РЕПОЗИТОРИЯ ДЛЯ АПИ
     private val tokenDataSource: TokenDataSource,
     private val taskRepository: TaskRepository,
     private val roleRepository: RoleRepository,
@@ -53,6 +55,7 @@ class GraphQLRepository(
     private val userTaskRepository: UserTaskRepository,
     private val groupRepository: GroupRepository,
 ): GraphQLClient {
+
     override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
         val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
 
