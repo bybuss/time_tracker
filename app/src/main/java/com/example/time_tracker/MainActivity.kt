@@ -27,8 +27,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //AppNavigation()
-                    //SignUpScreen()
-//                    AddRoleTestScreen()
                     TestButtonsScreen()
                 }
             }

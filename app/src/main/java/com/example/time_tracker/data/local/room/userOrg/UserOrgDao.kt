@@ -2,7 +2,7 @@ package com.example.time_tracker.data.local.room.userOrg
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.time_tracker.base.BaseDao
+import com.example.time_tracker.data.local.room.base.BaseDao
 import kotlinx.coroutines.flow.Flow
 
 /**

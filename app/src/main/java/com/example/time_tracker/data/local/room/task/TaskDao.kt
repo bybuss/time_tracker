@@ -3,7 +3,7 @@ package com.example.time_tracker.data.local.room.task
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.time_tracker.base.BaseDao
+import com.example.time_tracker.data.local.room.base.BaseDao
 import com.example.time_tracker.data.local.room.relations.userTask.TaskWithUsers
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask

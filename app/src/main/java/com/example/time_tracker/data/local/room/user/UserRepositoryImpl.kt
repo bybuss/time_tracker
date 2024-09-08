@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.room.user
 
-import com.example.time_tracker.base.BaseRepositoryImpl
+import com.example.time_tracker.data.local.room.base.BaseRepositoryImpl
 import com.example.time_tracker.data.local.room.relations.userOrg.UserWithOrganizations
 import com.example.time_tracker.data.local.room.relations.userTask.UserWithTasks
 import kotlinx.coroutines.flow.Flow

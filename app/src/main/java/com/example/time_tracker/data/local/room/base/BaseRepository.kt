@@ -1,4 +1,4 @@
-package com.example.time_tracker.base
+package com.example.time_tracker.data.local.room.base
 
 /**
  * @author bybuss

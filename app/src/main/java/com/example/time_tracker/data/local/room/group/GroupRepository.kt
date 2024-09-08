@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.room.group
 
-import com.example.time_tracker.base.BaseRepository
+import com.example.time_tracker.data.local.room.base.BaseRepository
 import com.example.time_tracker.data.local.room.relations.GroupWithTasks
 import kotlinx.coroutines.flow.Flow
 

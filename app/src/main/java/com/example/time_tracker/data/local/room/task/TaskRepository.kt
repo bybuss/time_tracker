@@ -1,6 +1,6 @@
 package com.example.time_tracker.data.local.room.task
 
-import com.example.time_tracker.base.BaseRepository
+import com.example.time_tracker.data.local.room.base.BaseRepository
 import com.example.time_tracker.data.local.room.relations.userTask.TaskWithUsers
 import com.example.time_tracker.domain.model.FullTask
 import com.example.time_tracker.domain.model.SimpleTask
