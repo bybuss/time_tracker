@@ -11,7 +11,17 @@ import com.example.time_tracker.data.local.room.user.UserRepository
 import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
 import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
 import com.example.time_tracker.domain.network.GraphQLClient
+import com.example.time_tracker.domain.useCase.AddOrganizationUseCase
+import com.example.time_tracker.domain.useCase.AddProjectUseCase
 import com.example.time_tracker.domain.useCase.AddRoleUseCase
+import com.example.time_tracker.domain.useCase.AddTaskUseCase
+import com.example.time_tracker.domain.useCase.AddUserUseCase
+import com.example.time_tracker.domain.useCase.AuthUserUseCase
+import com.example.time_tracker.domain.useCase.GetAllFullTasksByAssignerIdUseCase
+import com.example.time_tracker.domain.useCase.GetAllSimpleTasksByAssignerIdUseCase
+import com.example.time_tracker.domain.useCase.GetFullTaskByIdUseCase
+import com.example.time_tracker.domain.useCase.GetSimpleTaskByIdUseCase
+import com.example.time_tracker.domain.useCase.RefreshTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,8 +54,19 @@ class SignUpViewModel @Inject constructor (
     private val userTaskRepository: UserTaskRepository,
     private val groupRepository: GroupRepository,
 
-    private val addRoleUseCase: AddRoleUseCase
+    private val addRoleUseCase: AddRoleUseCase,
+    private val addOrganizationUseCase: AddOrganizationUseCase,
+    private val addUserUseCase: AddUserUseCase,
+    private val authUserUseCase: AuthUserUseCase,
+    private val refreshTokenUseCase: RefreshTokenUseCase,
+    private val addProjectUseCase: AddProjectUseCase,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val getAllFullTasksByAssignerIdUseCase: GetAllFullTasksByAssignerIdUseCase,
+    private val getFullTaskByIdUseCase: GetFullTaskByIdUseCase,
+    private val getAllSimpleTasksByAssignerIdUseCase: GetAllSimpleTasksByAssignerIdUseCase,
+    private val getSimpleTaskByIdUseCase: GetSimpleTaskByIdUseCase,
 ): ViewModel() {
+
     private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     var uiState = _uiState.asStateFlow()
     var token: String? = null
@@ -74,33 +95,12 @@ class SignUpViewModel @Inject constructor (
         }
     }
 
-    suspend fun authUser(email: String, password: String) {
+    suspend fun addOrganization(name: String, description: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(
-                        graphQLRepository.authUser(
-                            email,
-                            password
-                        )
-                    )
-                }
-            } catch (e: TimeoutCancellationException) {
-                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
-            } catch (e: Exception) {
-                SignUpUiState.Error(e.message.toString())
-            }
-        }
-    }
-
-    suspend fun refreshToken() {
-        viewModelScope.launch {
-            _uiState.value = SignUpUiState.Loading
-            _uiState.value = try {
-                withTimeout(TIMEOUT_MILLIS) {
-                    //delay(500)
-                    SignUpUiState.Success(graphQLRepository.refreshToken())
+                    SignUpUiState.Success(addOrganizationUseCase.addOrganization(name,  description))
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -122,13 +122,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        graphQLRepository.addUser(
-                            firstName,
-                            lastName,
-                            roleId,
-                            email,
-                            password
-                        )
+                        addUserUseCase.addUser(firstName, lastName, roleId, email, password)
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -139,17 +133,27 @@ class SignUpViewModel @Inject constructor (
         }
     }
 
-    suspend fun addOrganization(name: String, description: String) {
+    suspend fun authUser(email: String, password: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(
-                        graphQLRepository.addOrganization(
-                            name,
-                            description
-                        )
-                    )
+                    SignUpUiState.Success(authUserUseCase.authUser(email, password))
+                }
+            } catch (e: TimeoutCancellationException) {
+                SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
+            } catch (e: Exception) {
+                SignUpUiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    suspend fun refreshToken() {
+        viewModelScope.launch {
+            _uiState.value = SignUpUiState.Loading
+            _uiState.value = try {
+                withTimeout(TIMEOUT_MILLIS) {
+                    SignUpUiState.Success(refreshTokenUseCase.refreshToken())
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -165,11 +169,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        graphQLRepository.addProject(
-                            name,
-                            organizationId,
-                            description
-                        )
+                        addProjectUseCase.addProject(name, organizationId, description)
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -198,7 +198,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        graphQLRepository.addTask(
+                        addTaskUseCase.addTask(
                             name,
                             description,
                             isDone,
@@ -226,7 +226,9 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(graphQLRepository.getAllFullTasksByAssignerId(assignerId))
+                    SignUpUiState.Success(
+                        getAllFullTasksByAssignerIdUseCase.getAllFullTasksByAssignerId(assignerId)
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -241,7 +243,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(graphQLRepository.getFullTaskById(id))
+                    SignUpUiState.Success(getFullTaskByIdUseCase.getFullTaskById(id))
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -256,7 +258,9 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(graphQLRepository.getAllSimpleTasksByAssignerId(assignerId))
+                    SignUpUiState.Success(
+                        getAllSimpleTasksByAssignerIdUseCase.getAllSimpleTasksByAssignerId(assignerId)
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -271,7 +275,7 @@ class SignUpViewModel @Inject constructor (
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(graphQLRepository.getSimpleTaskById(id))
+                    SignUpUiState.Success(getSimpleTaskByIdUseCase.getSimpleTaskById(id))
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -281,12 +285,7 @@ class SignUpViewModel @Inject constructor (
         }
     }
 
-    suspend fun requestChangePassword(
-        id: String,
-        firstName: String,
-        lastName: String,
-        email: String
-    ) {
+    suspend fun requestChangePassword(id: String, firstName: String, lastName: String, email: String) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
