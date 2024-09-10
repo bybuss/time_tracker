@@ -1,4 +1,4 @@
-package com.example.time_tracker.domain.useCase
+package com.example.time_tracker.domain.useCase.graphQL
 
 import com.example.time_tracker.domain.network.GraphQLClient
 import javax.inject.Inject
