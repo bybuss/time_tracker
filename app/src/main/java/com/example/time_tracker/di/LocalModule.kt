@@ -24,43 +24,57 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalModule {
+
     @Provides
     @Singleton
-    fun provideDatabase (@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "time_tracker")
-            .fallbackToDestructiveMigration()
-            .build()
+    fun provideDatabase (
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "time_tracker"
+        ).fallbackToDestructiveMigration()
+         .build()
     }
 
     @Provides
     @Singleton
-    fun provideGroupDao(appDatabase: AppDatabase): GroupDao = appDatabase.groupDao()
+    fun provideGroupDao(appDatabase: AppDatabase): GroupDao
+        = appDatabase.groupDao()
 
     @Provides
     @Singleton
-    fun provideOrganizationDao(appDatabase: AppDatabase): OrganizationDao = appDatabase.organizationDao()
+    fun provideOrganizationDao(appDatabase: AppDatabase): OrganizationDao
+        = appDatabase.organizationDao()
 
     @Provides
     @Singleton
-    fun provideProjectDao(appDatabase: AppDatabase): ProjectDao = appDatabase.projectDao()
+    fun provideProjectDao(appDatabase: AppDatabase): ProjectDao
+        = appDatabase.projectDao()
 
     @Provides
     @Singleton
-    fun provideRoleDao(appDatabase: AppDatabase): RoleDao = appDatabase.roleDao()
+    fun provideRoleDao(appDatabase: AppDatabase): RoleDao
+        = appDatabase.roleDao()
 
     @Provides
     @Singleton
-    fun provideTaskDao(appDatabase: AppDatabase): TaskDao = appDatabase.taskDao()
+    fun provideTaskDao(appDatabase: AppDatabase): TaskDao
+        = appDatabase.taskDao()
 
     @Provides
     @Singleton
-    fun provideUserDao(appDatabase: AppDatabase): UserDao = appDatabase.userDao()
+    fun provideUserDao(appDatabase: AppDatabase): UserDao
+        = appDatabase.userDao()
 
     @Provides
     @Singleton
-    fun provideUserOrgDao(appDatabase: AppDatabase): UserOrgDao = appDatabase.userOrgDao()
+    fun provideUserOrgDao(appDatabase: AppDatabase): UserOrgDao
+        = appDatabase.userOrgDao()
 
     @Provides
     @Singleton
-    fun provideUserTaskDao(appDatabase: AppDatabase): UserTaskDao = appDatabase.userTaskDao()
+    fun provideUserTaskDao(appDatabase: AppDatabase): UserTaskDao
+        = appDatabase.userTaskDao()
 }

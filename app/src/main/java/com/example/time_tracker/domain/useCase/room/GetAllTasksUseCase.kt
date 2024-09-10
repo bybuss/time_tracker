@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GetAllTasksFromRoomUseCase @Inject constructor(private val taskRepository: TaskRepository) {
+class GetAllTasksUseCase @Inject constructor(private val taskRepository: TaskRepository) {
 
     fun getAllTasks(): Flow<List<Task>> {
         return taskRepository.getAllTasks()

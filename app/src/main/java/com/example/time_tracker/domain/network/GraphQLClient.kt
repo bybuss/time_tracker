@@ -9,7 +9,10 @@ import com.example.time_tracker.domain.model.SimpleTask
  */
 interface GraphQLClient {
 
-    suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int
+    suspend fun addRole(
+        name: String,
+        permissions: Map<String, Map<String, Boolean>>
+    ): Int
 
     suspend fun addOrganization(name: String, description: String): Int
 
@@ -25,7 +28,11 @@ interface GraphQLClient {
 
     suspend fun refreshToken(): AccessToken
 
-    suspend fun addProject(name: String, organizationId: Int, description: String): Int
+    suspend fun addProject(
+        name: String,
+        organizationId: Int,
+        description: String
+    ): Int
 
     suspend fun addTask(
         name: String,
@@ -41,11 +48,15 @@ interface GraphQLClient {
         assignees: List<Map<String, Any>>
     ): Int
 
-    suspend fun getAllFullTasksByAssignerId(assignerId: String): List<FullTask>
+    suspend fun getAllFullTasksByAssignerId(
+        assignerId: String
+    ): List<FullTask>
 
     suspend fun getFullTaskById(id: Int): FullTask
 
-    suspend fun getAllSimpleTasksByAssignerId(assignerId: String): List<SimpleTask>
+    suspend fun getAllSimpleTasksByAssignerId(
+        assignerId: String
+    ): List<SimpleTask>
 
     suspend fun getSimpleTaskById(id: Int): SimpleTask
 
@@ -56,5 +67,8 @@ interface GraphQLClient {
         email: String
     ): Boolean
 
-    suspend fun changePassword(newPassword: String, changePasswordToken: String): Boolean
+    suspend fun changePassword(
+        newPassword: String,
+        changePasswordToken: String
+    ): Boolean
 }

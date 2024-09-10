@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GetAllGroupsWithTasksFromRoomUseCase @Inject constructor(
+class GetAllGroupsWithTasksUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
 

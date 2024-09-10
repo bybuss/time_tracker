@@ -2,15 +2,6 @@ package com.example.time_tracker.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.time_tracker.data.local.room.group.GroupRepository
-import com.example.time_tracker.data.local.room.organization.OrganizationRepository
-import com.example.time_tracker.data.local.room.project.ProjectRepository
-import com.example.time_tracker.data.local.room.role.RoleRepository
-import com.example.time_tracker.data.local.room.task.TaskRepository
-import com.example.time_tracker.data.local.room.user.UserRepository
-import com.example.time_tracker.data.local.room.userOrg.UserOrgRepository
-import com.example.time_tracker.data.local.room.userTask.UserTaskRepository
-import com.example.time_tracker.domain.network.GraphQLClient
 import com.example.time_tracker.domain.useCase.graphQL.AddOrganizationUseCase
 import com.example.time_tracker.domain.useCase.graphQL.AddProjectUseCase
 import com.example.time_tracker.domain.useCase.graphQL.AddRoleUseCase
@@ -20,22 +11,22 @@ import com.example.time_tracker.domain.useCase.graphQL.AuthUserUseCase
 import com.example.time_tracker.domain.useCase.graphQL.ChangePasswordUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetAllFullTasksByAssignerIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetAllSimpleTasksByAssignerIdUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllTasksFromRoomUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllTasksUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetFullTaskByIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetSimpleTaskByIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.RefreshTokenUseCase
 import com.example.time_tracker.domain.useCase.graphQL.RequestChangePasswordUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllGroupsWithTasksFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsWithUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllProjectsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllRolesFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllTasksWithUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUserOrgFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUserTaskFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersWithOrganizationsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersWithTasksFromRoomUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllGroupsWithTasksUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsWithUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllProjectsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllRolesUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllTasksWithUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUserOrgUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUserTaskUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersWithOrganizationsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersWithTasksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,21 +62,23 @@ class SignUpViewModel @Inject constructor(
     private val requestChangePasswordUseCase: RequestChangePasswordUseCase,
     private val changePasswordUseCase: ChangePasswordUseCase,
 
-    private val getAllTasksFromRoomUseCase: GetAllTasksFromRoomUseCase,
-    private val getAllRolesFromRoomUseCase: GetAllRolesFromRoomUseCase,
-    private val getAllOrganizationsFromRoomUseCase: GetAllOrganizationsFromRoomUseCase,
-    private val getAllProjectsFromRoomUseCase: GetAllProjectsFromRoomUseCase,
-    private val getAllUsersFromRoomUseCase: GetAllUsersFromRoomUseCase,
-    private val getAllTasksWithUsersFromRoomUseCase: GetAllTasksWithUsersFromRoomUseCase,
-    private val getAllUsersWithTasksFromRoomUseCase: GetAllUsersWithTasksFromRoomUseCase,
-    private val getAllUsersWithOrganizationsFromRoomUseCase: GetAllUsersWithOrganizationsFromRoomUseCase,
-    private val getAllOrganizationsWithUsersFromRoomUseCase: GetAllOrganizationsWithUsersFromRoomUseCase,
-    private val getAllUserOrgFromRoomUseCase: GetAllUserOrgFromRoomUseCase,
-    private val getAllUserTaskFromRoomUseCase: GetAllUserTaskFromRoomUseCase,
-    private val getAllGroupsWithTasksFromRoomUseCase: GetAllGroupsWithTasksFromRoomUseCase
+    private val getAllTasksUseCase: GetAllTasksUseCase,
+    private val getAllRolesUseCase: GetAllRolesUseCase,
+    private val getAllOrganizationsUseCase: GetAllOrganizationsUseCase,
+    private val getAllProjectsUseCase: GetAllProjectsUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
+    private val getAllTasksWithUsersUseCase: GetAllTasksWithUsersUseCase,
+    private val getAllUsersWithTasksUseCase: GetAllUsersWithTasksUseCase,
+    private val getAllUsersWithOrganizationsUseCase: GetAllUsersWithOrganizationsUseCase,
+    private val getAllOrganizationsWithUsersUseCase: GetAllOrganizationsWithUsersUseCase,
+    private val getAllUserOrgUseCase: GetAllUserOrgUseCase,
+    private val getAllUserTaskUseCase: GetAllUserTaskUseCase,
+    private val getAllGroupsWithTasksUseCase: GetAllGroupsWithTasksUseCase
 ): ViewModel() {
 
-    private var _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
+    private var _uiState = MutableStateFlow<SignUpUiState>(
+        SignUpUiState.Loading
+    )
     var uiState = _uiState.asStateFlow()
     var token: String? = null
         private set
@@ -98,12 +91,17 @@ class SignUpViewModel @Inject constructor(
         token = responseToken
     }
 
-    suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>) {
+    suspend fun addRole(
+        name: String,
+        permissions: Map<String, Map<String, Boolean>>
+    ) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(addRoleUseCase.addRole(name, permissions))
+                    SignUpUiState.Success(
+                        addRoleUseCase.addRole(name, permissions)
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -113,12 +111,20 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    suspend fun addOrganization(name: String, description: String) {
+    suspend fun addOrganization(
+        name: String,
+        description: String
+    ) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(addOrganizationUseCase.addOrganization(name,  description))
+                    SignUpUiState.Success(
+                        addOrganizationUseCase.addOrganization(
+                            name,
+                            description
+                        )
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -140,7 +146,13 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        addUserUseCase.addUser(firstName, lastName, roleId, email, password)
+                        addUserUseCase.addUser(
+                            firstName,
+                            lastName,
+                            roleId,
+                            email,
+                            password
+                        )
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -156,7 +168,10 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(authUserUseCase.authUser(email, password))
+                    SignUpUiState.Success(authUserUseCase.authUser(
+                        email,
+                        password
+                    ))
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -171,7 +186,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(refreshTokenUseCase.refreshToken())
+                    SignUpUiState.Success(
+                        refreshTokenUseCase.refreshToken()
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -181,13 +198,21 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    suspend fun addProject(name: String, organizationId: Int, description: String) {
+    suspend fun addProject(
+        name: String,
+        organizationId: Int,
+        description: String
+    ) {
         viewModelScope.launch {
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        addProjectUseCase.addProject(name, organizationId, description)
+                        addProjectUseCase.addProject(
+                            name,
+                            organizationId,
+                            description
+                        )
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -245,7 +270,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllFullTasksByAssignerIdUseCase.getAllFullTasksByAssignerId(assignerId)
+                        getAllFullTasksByAssignerIdUseCase
+                            .getAllFullTasksByAssignerId(assignerId)
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -261,7 +287,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getFullTaskByIdUseCase.getFullTaskById(id))
+                    SignUpUiState.Success(getFullTaskByIdUseCase
+                        .getFullTaskById(id)
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -277,7 +305,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllSimpleTasksByAssignerIdUseCase.getAllSimpleTasksByAssignerId(assignerId)
+                        getAllSimpleTasksByAssignerIdUseCase
+                            .getAllSimpleTasksByAssignerId(assignerId)
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -293,7 +322,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getSimpleTaskByIdUseCase.getSimpleTaskById(id))
+                    SignUpUiState.Success(
+                        getSimpleTaskByIdUseCase.getSimpleTaskById(id)
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -314,11 +345,12 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        requestChangePasswordUseCase.requestChangePassword(
-                            id,
-                            firstName,
-                            lastName,
-                            email
+                        requestChangePasswordUseCase
+                            .requestChangePassword(
+                                id,
+                                firstName,
+                                lastName,
+                                email
                         )
                     )
                 }
@@ -336,7 +368,11 @@ class SignUpViewModel @Inject constructor(
                 _uiState.value = SignUpUiState.Loading
                 _uiState.value = try {
                     withTimeout(TIMEOUT_MILLIS) {
-                        SignUpUiState.Success(changePasswordUseCase.changePassword(newPassword, it))
+                        SignUpUiState.Success(
+                            changePasswordUseCase.changePassword(
+                                newPassword, it
+                            )
+                        )
                     }
                 } catch (e: TimeoutCancellationException) {
                     SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -352,7 +388,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getAllTasksFromRoomUseCase.getAllTasks().first())
+                    SignUpUiState.Success(
+                        getAllTasksUseCase.getAllTasks().first()
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -367,7 +405,9 @@ class SignUpViewModel @Inject constructor(
              _uiState.value = SignUpUiState.Loading
              _uiState.value = try {
                  withTimeout(TIMEOUT_MILLIS) {
-                     SignUpUiState.Success(getAllRolesFromRoomUseCase.getAllRoles().first())
+                     SignUpUiState.Success(
+                         getAllRolesUseCase.getAllRoles().first()
+                     )
                  }
              } catch (e: TimeoutCancellationException) {
                  SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -382,7 +422,10 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getAllOrganizationsFromRoomUseCase.getAllOrganizations().first())
+                    SignUpUiState.Success(
+                        getAllOrganizationsUseCase
+                            .getAllOrganizations().first()
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -397,7 +440,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getAllProjectsFromRoomUseCase.getAllProjects().first())
+                    SignUpUiState.Success(
+                        getAllProjectsUseCase.getAllProjects().first()
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -412,7 +457,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
-                    SignUpUiState.Success(getAllUsersFromRoomUseCase.getAllUsers().first())
+                    SignUpUiState.Success(
+                        getAllUsersUseCase.getAllUsers().first()
+                    )
                 }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -428,7 +475,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllTasksWithUsersFromRoomUseCase.getAllTasksWithUsers().first()
+                        getAllTasksWithUsersUseCase
+                            .getAllTasksWithUsers().first()
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -445,7 +493,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllUsersWithTasksFromRoomUseCase.getAllUsersWithTasks().first()
+                        getAllUsersWithTasksUseCase
+                            .getAllUsersWithTasks().first()
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -462,7 +511,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllUsersWithOrganizationsFromRoomUseCase.getAllUsersWithOrganizations().first()
+                        getAllUsersWithOrganizationsUseCase
+                            .getAllUsersWithOrganizations().first()
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -479,7 +529,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllOrganizationsWithUsersFromRoomUseCase.getAllOrganizationsWithUsers().first()
+                        getAllOrganizationsWithUsersUseCase
+                            .getAllOrganizationsWithUsers().first()
                     )
                 }
             } catch (e: TimeoutCancellationException) {
@@ -495,7 +546,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                withTimeout(TIMEOUT_MILLIS) {
-                   SignUpUiState.Success(getAllUserOrgFromRoomUseCase.getAllUserOrg().first())
+                   SignUpUiState.Success(getAllUserOrgUseCase
+                       .getAllUserOrg().first())
                }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -510,7 +562,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = SignUpUiState.Loading
             _uiState.value = try {
                withTimeout(TIMEOUT_MILLIS) {
-                   SignUpUiState.Success(getAllUserTaskFromRoomUseCase.getAllUserTask().first())
+                   SignUpUiState.Success(getAllUserTaskUseCase
+                       .getAllUserTask().first())
                }
             } catch (e: TimeoutCancellationException) {
                 SignUpUiState.Error("Время ожидания ответа истекло: ${e.message.toString()}")
@@ -525,7 +578,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = try {
                 withTimeout(TIMEOUT_MILLIS) {
                     SignUpUiState.Success(
-                        getAllGroupsWithTasksFromRoomUseCase.getAllGroupsWithTasks().first()
+                        getAllGroupsWithTasksUseCase
+                            .getAllGroupsWithTasks().first()
                     )
                 }
             } catch (e: TimeoutCancellationException) {

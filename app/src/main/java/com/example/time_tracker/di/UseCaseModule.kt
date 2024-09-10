@@ -18,22 +18,22 @@ import com.example.time_tracker.domain.useCase.graphQL.AuthUserUseCase
 import com.example.time_tracker.domain.useCase.graphQL.ChangePasswordUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetAllFullTasksByAssignerIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetAllSimpleTasksByAssignerIdUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllTasksFromRoomUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllTasksUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetFullTaskByIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.GetSimpleTaskByIdUseCase
 import com.example.time_tracker.domain.useCase.graphQL.RefreshTokenUseCase
 import com.example.time_tracker.domain.useCase.graphQL.RequestChangePasswordUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllGroupsWithTasksFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsWithUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllProjectsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllRolesFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllTasksWithUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUserOrgFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUserTaskFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersWithOrganizationsFromRoomUseCase
-import com.example.time_tracker.domain.useCase.room.GetAllUsersWithTasksFromRoomUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllGroupsWithTasksUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllOrganizationsWithUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllProjectsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllRolesUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllTasksWithUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUserOrgUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUserTaskUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersWithOrganizationsUseCase
+import com.example.time_tracker.domain.useCase.room.GetAllUsersWithTasksUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,145 +49,175 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideAddRoleUseCase(graphQLClient: GraphQLClient): AddRoleUseCase
+    fun provideAddRoleUseCase(
+        graphQLClient: GraphQLClient
+    ): AddRoleUseCase
         = AddRoleUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideAddOrganizationUseCase(graphQLClient: GraphQLClient): AddOrganizationUseCase
+    fun provideAddOrganizationUseCase(
+        graphQLClient: GraphQLClient
+    ): AddOrganizationUseCase
         = AddOrganizationUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideAddUserUseCase(graphQLClient: GraphQLClient): AddUserUseCase
+    fun provideAddUserUseCase(
+        graphQLClient: GraphQLClient
+    ): AddUserUseCase
             = AddUserUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideAuthUserUseCase(graphQLClient: GraphQLClient): AuthUserUseCase
+    fun provideAuthUserUseCase(
+        graphQLClient: GraphQLClient
+    ): AuthUserUseCase
             = AuthUserUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideRefreshTokenUseCase(graphQLClient: GraphQLClient): RefreshTokenUseCase
+    fun provideRefreshTokenUseCase(
+        graphQLClient: GraphQLClient
+    ): RefreshTokenUseCase
             = RefreshTokenUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideAddProjectUseCase(graphQLClient: GraphQLClient): AddProjectUseCase
+    fun provideAddProjectUseCase(
+        graphQLClient: GraphQLClient
+    ): AddProjectUseCase
             = AddProjectUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideAddTaskUseCase(graphQLClient: GraphQLClient): AddTaskUseCase
+    fun provideAddTaskUseCase(
+        graphQLClient: GraphQLClient
+    ): AddTaskUseCase
             = AddTaskUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideGetAllFullTasksByAssignerIdUseCase(graphQLClient: GraphQLClient): GetAllFullTasksByAssignerIdUseCase
+    fun provideGetAllFullTasksByAssignerIdUseCase(
+        graphQLClient: GraphQLClient
+    ): GetAllFullTasksByAssignerIdUseCase
             = GetAllFullTasksByAssignerIdUseCase(graphQLClient)
     @Provides
     @Singleton
-    fun provideGetFullTaskByIdUseCase(graphQLClient: GraphQLClient): GetFullTaskByIdUseCase
+    fun provideGetFullTaskByIdUseCase(
+        graphQLClient: GraphQLClient
+    ): GetFullTaskByIdUseCase
             = GetFullTaskByIdUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideGetAllSimpleTasksByAssignerIdUseCase(graphQLClient: GraphQLClient): GetAllSimpleTasksByAssignerIdUseCase
+    fun provideGetAllSimpleTasksByAssignerIdUseCase(
+        graphQLClient: GraphQLClient
+    ): GetAllSimpleTasksByAssignerIdUseCase
             = GetAllSimpleTasksByAssignerIdUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideGetSimpleTaskByIdUseCase(graphQLClient: GraphQLClient): GetSimpleTaskByIdUseCase
+    fun provideGetSimpleTaskByIdUseCase(
+        graphQLClient: GraphQLClient
+    ): GetSimpleTaskByIdUseCase
             = GetSimpleTaskByIdUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideRequestChangePasswordUseCase(graphQLClient: GraphQLClient): RequestChangePasswordUseCase
+    fun provideRequestChangePasswordUseCase(
+        graphQLClient: GraphQLClient
+    ): RequestChangePasswordUseCase
             = RequestChangePasswordUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideChangePasswordUseCase(graphQLClient: GraphQLClient): ChangePasswordUseCase
+    fun provideChangePasswordUseCase(
+        graphQLClient: GraphQLClient
+    ): ChangePasswordUseCase
             = ChangePasswordUseCase(graphQLClient)
 
     @Provides
     @Singleton
-    fun provideGetAllTasksFromRoomUseCase(taskRepository: TaskRepository): GetAllTasksFromRoomUseCase
-            = GetAllTasksFromRoomUseCase(taskRepository)
+    fun provideGetAllTasksFromRoomUseCase(
+        taskRepository: TaskRepository
+    ): GetAllTasksUseCase
+            = GetAllTasksUseCase(taskRepository)
 
     @Provides
     @Singleton
-    fun provideGetAllRolesFromRoomUseCase(roleRepository: RoleRepository): GetAllRolesFromRoomUseCase
-            = GetAllRolesFromRoomUseCase(roleRepository)
+    fun provideGetAllRolesFromRoomUseCase(
+        roleRepository: RoleRepository
+    ): GetAllRolesUseCase
+            = GetAllRolesUseCase(roleRepository)
 
     @Provides
     @Singleton
     fun provideGetAllOrganizationsFromRoomUseCase(
         organizationRepository: OrganizationRepository
-    ): GetAllOrganizationsFromRoomUseCase
-        = GetAllOrganizationsFromRoomUseCase(organizationRepository)
+    ): GetAllOrganizationsUseCase
+        = GetAllOrganizationsUseCase(organizationRepository)
 
     @Provides
     @Singleton
     fun provideGetAllProjectsFromRoomUseCase(
         projectRepository: ProjectRepository
-    ): GetAllProjectsFromRoomUseCase
-        = GetAllProjectsFromRoomUseCase(projectRepository)
+    ): GetAllProjectsUseCase
+        = GetAllProjectsUseCase(projectRepository)
 
     @Provides
     @Singleton
     fun provideGetAllUsersFromRoomUseCase(
         userRepository: UserRepository
-    ): GetAllUsersFromRoomUseCase
-        = GetAllUsersFromRoomUseCase(userRepository)
+    ): GetAllUsersUseCase
+        = GetAllUsersUseCase(userRepository)
 
     @Provides
     @Singleton
     fun provideGetAllTasksWithUsersFromRoomUseCase(
         taskRepository: TaskRepository
-    ): GetAllTasksWithUsersFromRoomUseCase
-        = GetAllTasksWithUsersFromRoomUseCase(taskRepository)
+    ): GetAllTasksWithUsersUseCase
+        = GetAllTasksWithUsersUseCase(taskRepository)
 
     @Provides
     @Singleton
     fun provideGetAllUsersWithTasksFromRoomUseCase(
         userRepository: UserRepository
-    ): GetAllUsersWithTasksFromRoomUseCase
-        = GetAllUsersWithTasksFromRoomUseCase(userRepository)
+    ): GetAllUsersWithTasksUseCase
+        = GetAllUsersWithTasksUseCase(userRepository)
 
     @Provides
     @Singleton
     fun provideGetAllUsersWithOrganizationsFromRoomUseCase(
         userRepository: UserRepository
-    ): GetAllUsersWithOrganizationsFromRoomUseCase
-        = GetAllUsersWithOrganizationsFromRoomUseCase(userRepository)
+    ): GetAllUsersWithOrganizationsUseCase
+        = GetAllUsersWithOrganizationsUseCase(userRepository)
 
     @Provides
     @Singleton
     fun provideGetAllOrganizationsWithUsersFromRoomUseCase(
         organizationRepository: OrganizationRepository
-    ): GetAllOrganizationsWithUsersFromRoomUseCase
-        = GetAllOrganizationsWithUsersFromRoomUseCase(organizationRepository)
+    ): GetAllOrganizationsWithUsersUseCase
+        = GetAllOrganizationsWithUsersUseCase(organizationRepository)
 
     @Provides
     @Singleton
     fun provideGetAllUserOrgFromRoomUseCase(
         userOrgRepository: UserOrgRepository
-    ): GetAllUserOrgFromRoomUseCase
-        = GetAllUserOrgFromRoomUseCase(userOrgRepository)
+    ): GetAllUserOrgUseCase
+        = GetAllUserOrgUseCase(userOrgRepository)
 
     @Provides
     @Singleton
     fun provideGetAllUserTaskFromRoomUseCase(
         userTaskRepository: UserTaskRepository
-    ): GetAllUserTaskFromRoomUseCase
-        = GetAllUserTaskFromRoomUseCase(userTaskRepository)
+    ): GetAllUserTaskUseCase
+        = GetAllUserTaskUseCase(userTaskRepository)
 
     @Provides
     @Singleton
     fun provideGetAllGroupsWithTasksFromRoomUseCase(
         groupRepository: GroupRepository
-    ): GetAllGroupsWithTasksFromRoomUseCase
-        = GetAllGroupsWithTasksFromRoomUseCase(groupRepository)
+    ): GetAllGroupsWithTasksUseCase
+        = GetAllGroupsWithTasksUseCase(groupRepository)
 }

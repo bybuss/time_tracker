@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GetAllRolesFromRoomUseCase @Inject constructor(private val roleRepository: RoleRepository) {
+class GetAllRolesUseCase @Inject constructor(private val roleRepository: RoleRepository) {
 
     fun getAllRoles(): Flow<List<Role>> {
         return roleRepository.getAllRoles()

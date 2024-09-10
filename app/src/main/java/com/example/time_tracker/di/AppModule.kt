@@ -1,5 +1,6 @@
 package com.example.time_tracker.di
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import dagger.Module
@@ -18,17 +19,25 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideContext(@ApplicationContext context: Context): Context = context
 
     @Provides
     @Singleton
-    fun provideCoroutineScope(): CoroutineScope = CoroutineScope(Dispatchers.IO)
+    fun provideContext(@ApplicationContext context: Context): Context
+        = context
 
+    @Provides
+    @Singleton
+    fun provideCoroutineScope(): CoroutineScope
+        = CoroutineScope(Dispatchers.IO)
+
+    @SuppressLint("HardwareIds")
     @Provides
     @Singleton
     @Named("deviceFingerprint")
-    fun provideDeviceFingerprint(@ApplicationContext context: Context): String
-        = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    fun provideDeviceFingerprint(
+        @ApplicationContext context: Context
+    ): String
+        = Settings.Secure.getString(
+            context.contentResolver, Settings.Secure.ANDROID_ID
+        )
 }

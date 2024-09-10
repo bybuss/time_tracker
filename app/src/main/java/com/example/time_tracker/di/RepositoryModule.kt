@@ -46,44 +46,66 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTokenDataSource(@ApplicationContext context: Context): TokenDataSource
+    fun provideTokenDataSource(
+        @ApplicationContext context: Context)
+    : TokenDataSource
         = TokenDataSourceImpl(context)
 
     @Provides
     @Singleton
-    fun provideTaskRepository(taskDao: TaskDao): TaskRepository = TaskRepositoryImpl(taskDao)
+    fun provideTaskRepository(
+        taskDao: TaskDao
+    ): TaskRepository
+        = TaskRepositoryImpl(taskDao)
 
     @Provides
     @Singleton
-    fun provideRoleRepository(roleDao: RoleDao): RoleRepository = RoleRepositoryImpl(roleDao)
+    fun provideRoleRepository(
+        roleDao: RoleDao
+    ): RoleRepository
+        = RoleRepositoryImpl(roleDao)
 
     @Provides
     @Singleton
-    fun provideOrganizationRepository(organizationDao: OrganizationDao): OrganizationRepository
+    fun provideOrganizationRepository(
+        organizationDao: OrganizationDao
+    ): OrganizationRepository
         = OrganizationRepositoryImpl(organizationDao)
 
     @Provides
     @Singleton
-    fun provideProjectRepository(projectDao: ProjectDao): ProjectRepository
+    fun provideProjectRepository(
+        projectDao: ProjectDao
+    ): ProjectRepository
         = ProjectRepositoryImpl(projectDao)
 
     @Provides
     @Singleton
-    fun provideUserRepository(userDao: UserDao): UserRepository = UserRepositoryImpl(userDao)
+    fun provideUserRepository(
+        userDao: UserDao
+    ): UserRepository
+        = UserRepositoryImpl(userDao)
 
     @Provides
     @Singleton
-    fun provideUserOrgRepository(userOrgDao: UserOrgDao): UserOrgRepository
+    fun provideUserOrgRepository(
+        userOrgDao: UserOrgDao
+    ): UserOrgRepository
         = UserOrgRepositoryImpl(userOrgDao)
 
     @Provides
     @Singleton
-    fun provideUserTaskRepository(userTaskDao: UserTaskDao): UserTaskRepository
+    fun provideUserTaskRepository(
+        userTaskDao: UserTaskDao
+    ): UserTaskRepository
         = UserTaskRepositoryImpl(userTaskDao)
 
     @Provides
     @Singleton
-    fun provideGroupRepository(groupDao: GroupDao): GroupRepository = GroupRepositoryImpl(groupDao)
+    fun provideGroupRepository(
+        groupDao: GroupDao
+    ): GroupRepository
+        = GroupRepositoryImpl(groupDao)
 
     @Provides
     @Singleton
@@ -95,10 +117,7 @@ object RepositoryModule {
         roleRepository: RoleRepository,
         organizationRepository: OrganizationRepository,
         projectRepository: ProjectRepository,
-        userRepository: UserRepository,
-        userOrgRepository: UserOrgRepository,
-        userTaskRepository: UserTaskRepository,
-        groupRepository: GroupRepository,
+        userRepository: UserRepository
     ): GraphQLClient {
         return GraphQLClientImpl(
             apolloClient,
@@ -108,10 +127,7 @@ object RepositoryModule {
             roleRepository,
             organizationRepository,
             projectRepository,
-            userRepository,
-            userOrgRepository,
-            userTaskRepository,
-            groupRepository
+            userRepository
         )
     }
 }

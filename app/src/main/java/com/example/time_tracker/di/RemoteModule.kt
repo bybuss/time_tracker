@@ -1,7 +1,5 @@
 package com.example.time_tracker.di
 
-import android.content.Context
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.time_tracker.BuildConfig
@@ -11,7 +9,6 @@ import com.example.time_tracker.data.network.interceptors.ExtractRefreshTokenInt
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -51,7 +48,9 @@ object RemoteModule {
         @Named("deviceFingerprint") deviceFingerprint: String
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(ExtractRefreshTokenInterceptor(tokenDataSource, coroutineScope))
+            .addInterceptor(ExtractRefreshTokenInterceptor(
+                tokenDataSource, coroutineScope
+            ))
             .addInterceptor(AddRefreshTokenInterceptor(tokenDataSource))
             .addInterceptor(Interceptor { chain ->
                 val request = chain.request().newBuilder()

@@ -51,18 +51,25 @@ class GraphQLClientImpl @Inject constructor (
     private val organizationRepository: OrganizationRepository,
     private val projectRepository: ProjectRepository,
     private val userRepository: UserRepository,
-    private val userOrgRepository: UserOrgRepository,
-    private val userTaskRepository: UserTaskRepository,
-    private val groupRepository: GroupRepository,
 ): GraphQLClient {
 
-    override suspend fun addRole(name: String, permissions: Map<String, Map<String, Boolean>>): Int {
-        val response = apolloClient.mutation(AddRoleMutation(name, permissions)).execute()
+    override suspend fun addRole(
+        name: String,
+        permissions: Map<String, Map<String, Boolean>>
+    ): Int {
+        val response = apolloClient.mutation(
+            AddRoleMutation(name, permissions)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val roleId = response.data?.addRole?.id
-            ?: throw ApolloException("Failed to add role: No ID returned")
+            ?: throw ApolloException(
+                "Failed to add role: No ID returned"
+            )
 
         roleRepository.insert(
             Role(
@@ -75,13 +82,24 @@ class GraphQLClientImpl @Inject constructor (
         return roleId
     }
 
-    override suspend fun addOrganization(name: String, description: String): Int {
-        val response = apolloClient.mutation(AddOrganizationMutation(name, description)).execute()
+    override suspend fun addOrganization(
+        name: String,
+        description:
+        String
+    ): Int {
+        val response = apolloClient.mutation(
+            AddOrganizationMutation(name, description)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val organizationId = response.data?.addOrganization?.id
-            ?: throw ApolloException("Failed to add organization: No ID returned")
+            ?: throw ApolloException(
+                "Failed to add organization: No ID returned"
+            )
 
         organizationRepository.insert(
             Organization(
@@ -109,10 +127,15 @@ class GraphQLClientImpl @Inject constructor (
             password
         )).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val userId = (response.data?.addUser?.id
-            ?: throw ApolloException("Failed to add user: No ID returned")
+            ?: throw ApolloException(
+                "Failed to add user: No ID returned"
+            )
         ).toString()
 
         userRepository.insert(
@@ -130,19 +153,31 @@ class GraphQLClientImpl @Inject constructor (
         return userId
     }
 
-    override suspend fun authUser(email: String, password: String): AccessToken {
-        val response = apolloClient.query(AuthUserQuery(email, password))
-            .addHttpHeader("Access-Token-Request", "true")
-            .execute()
+    override suspend fun authUser(
+        email: String,
+        password: String
+    ): AccessToken {
+        val response = apolloClient.query(
+            AuthUserQuery(email, password)
+        ).addHttpHeader("Access-Token-Request", "true")
+         .execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val responseJson = convertToJson((
-                response.data?.authUser ?: throw ApolloException("User not found")
+                response.data?.authUser ?: throw ApolloException(
+                    "User not found"
+                )
         ).toString())
 
-        val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
+        val accessToken = Json.decodeFromString<AuthUserResponse>(
+                responseJson
+        ).accessToken
 
+        //FIXME: УБРАТЬ ЛОКАЛЬНОЕ СОХРАНЕНИЕ ИЗ РЕПОЗИТОРИЯ ДЛЯ АПИ
         tokenDataSource.saveAccessToken(accessToken.token)
         Log.d("TokenStoreRepository", "saveAccessToken from authUser: ${accessToken.token}")
         tokenDataSource.saveAccessTokenExpiresTime(accessToken.expiresIn)
@@ -150,8 +185,11 @@ class GraphQLClientImpl @Inject constructor (
         tokenDataSource.saveAccessTokenCreatedTime(accessToken.createdAt)
         Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from authUser: ${accessToken.createdAt}")
 
-        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty())
-            throw ApolloException("Токен не был получен!")
+        if (
+            accessToken.token.isEmpty() ||
+            accessToken.token.isEmpty() ||
+            accessToken.token.isEmpty()
+        ) throw ApolloException("Токен не был получен!")
 
         return AccessToken(
             token = accessToken.token,
@@ -165,24 +203,41 @@ class GraphQLClientImpl @Inject constructor (
             .addHttpHeader("Refresh-Token-Request", "true")
             .execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val responseJson = convertToJson((
-                response.data?.refresh ?: throw ApolloException("User not found")
+                response.data?.refresh ?: throw ApolloException(
+                    "User not found"
+                )
         ).toString())
 
-        val accessToken = Json.decodeFromString<AuthUserResponse>(responseJson).accessToken
+        val accessToken = Json.decodeFromString<AuthUserResponse>(
+            responseJson
+        ).accessToken
 
-    tokenDataSource.saveAccessToken(accessToken.token)
-    Log.d("TokenStoreRepository", "saveAccessToken from refreshToken: ${accessToken.token}")
-    tokenDataSource.saveAccessTokenExpiresTime(accessToken.expiresIn)
-    Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.expiresIn}")
-    tokenDataSource.saveAccessTokenCreatedTime(accessToken.createdAt)
-    Log.d("TokenStoreRepository", "saveAccessTokenExpiresTime from refreshToken: ${accessToken.createdAt}")
+        //FIXME: УБРАТЬ ЛОКАЛЬНОЕ СОХРАНЕНИЕ ИЗ РЕПОЗИТОРИЯ ДЛЯ АПИ
+        tokenDataSource.saveAccessToken(accessToken.token)
+        Log.d("TokenStoreRepository", "saveAccessToken from refreshToken: ${accessToken.token}")
+        tokenDataSource.saveAccessTokenExpiresTime(accessToken.expiresIn)
+        Log.d(
+            "TokenStoreRepository",
+            "saveAccessTokenExpiresTime from refreshToken: ${accessToken.expiresIn}"
+        )
+        tokenDataSource.saveAccessTokenCreatedTime(accessToken.createdAt)
+        Log.d(
+            "TokenStoreRepository",
+            "saveAccessTokenExpiresTime from refreshToken: ${accessToken.createdAt}"
+        )
 
-        if (accessToken.token.isEmpty() || accessToken.token.isEmpty() || accessToken.token.isEmpty()) {
-            throw ApolloException("Токен не был получен!")
-        }
+        if (
+            accessToken.token.isEmpty() ||
+            accessToken.token.isEmpty() ||
+            accessToken.token.isEmpty()
+        ) throw ApolloException("Токен не был получен!")
+
 
         return AccessToken(
             token = accessToken.token,
@@ -191,15 +246,24 @@ class GraphQLClientImpl @Inject constructor (
         )
     }
 
-    override suspend fun addProject(name: String, organizationId: Int, description: String): Int {
+    override suspend fun addProject(
+        name: String,
+        organizationId: Int,
+        description: String
+    ): Int {
         val response = apolloClient.mutation(
             AddProjectMutation(name, organizationId, description)
         ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val projectId = response.data?.addProject?.id
-            ?: throw ApolloException("Failed to add project: No ID returned")
+            ?: throw ApolloException(
+                "Failed to add project: No ID returned"
+        )
 
         projectRepository.insert(
             Project(
@@ -243,10 +307,15 @@ class GraphQLClientImpl @Inject constructor (
             )
         ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         val taskId = response.data?.addTask?.id
-            ?: throw ApolloException("Failed to add task: No ID returned")
+            ?: throw ApolloException(
+                "Failed to add task: No ID returned"
+            )
 
         taskRepository.insert(
             Task(
@@ -269,38 +338,68 @@ class GraphQLClientImpl @Inject constructor (
         return taskId
     }
 
-    override suspend fun getAllFullTasksByAssignerId(assignerId: String): List<FullTask> {
-        val response = apolloClient.query(GetAllFullTasksByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getAllFullTasksByAssignerId(
+        assignerId: String
+    ): List<FullTask> {
+        val response = apolloClient.query(
+            GetAllFullTasksByAssignerIdQuery(assignerId)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
-        return response.data?.getTask?.map { it.toFulTask() } ?: emptyList()
+        return response.data?.getTask?.map { it.toFulTask() }
+            ?: emptyList()
     }
 
     override suspend fun getFullTaskById(id: Int): FullTask {
-        val response = apolloClient.query(GetFullTaskByIdQuery(id)).execute()
+        val response = apolloClient.query(
+            GetFullTaskByIdQuery(id)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         return response.data?.getTask?.firstOrNull()?.toFullTask()
-            ?: throw ApolloException("Нет такой задачи!")
+            ?: throw ApolloException(
+                "Нет такой задачи!"
+            )
     }
 
-    override suspend fun getAllSimpleTasksByAssignerId(assignerId: String): List<SimpleTask> {
-        val response = apolloClient.query(GetAllSimpleTasksByAssignerIdQuery(assignerId)).execute()
+    override suspend fun getAllSimpleTasksByAssignerId(
+        assignerId: String
+    ): List<SimpleTask> {
+        val response = apolloClient.query(
+            GetAllSimpleTasksByAssignerIdQuery(assignerId)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
-        return response.data?.getTask?.map { it.toSimpleTask() } ?: emptyList()
+        return response.data?.getTask?.map { it.toSimpleTask() }
+            ?: emptyList()
     }
 
     override suspend fun getSimpleTaskById(id: Int): SimpleTask {
-        val response = apolloClient.query(GetSimpleTaskByIdQuery(id)).execute()
+        val response = apolloClient.query(
+            GetSimpleTaskByIdQuery(id)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         return response.data?.getTask?.firstOrNull()?.toSimpleTask()
-            ?: throw ApolloException("Нет такой задачи!")
+            ?: throw ApolloException(
+                "Нет такой задачи!"
+            )
     }
 
     override suspend fun requestChangePassword(
@@ -316,15 +415,26 @@ class GraphQLClientImpl @Inject constructor (
             email
         )).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         return response.data?.requestChangePassword ?: false
     }
 
-    override suspend fun changePassword(newPassword: String, changePasswordToken: String): Boolean {
-        val response = apolloClient.mutation(ChangePasswordMutation(newPassword, changePasswordToken)).execute()
+    override suspend fun changePassword(
+        newPassword: String,
+        changePasswordToken: String
+    ): Boolean {
+        val response = apolloClient.mutation(
+            ChangePasswordMutation(newPassword, changePasswordToken)
+        ).execute()
 
-        if (response.hasErrors()) throw ApolloException(response.errors?.firstOrNull()?.message)
+        if (response.hasErrors())
+            throw ApolloException(
+                response.errors?.firstOrNull()?.message
+            )
 
         return response.data?.changePassword ?: false
     }

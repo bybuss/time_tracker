@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GetAllUsersWithOrganizationsFromRoomUseCase @Inject constructor(
+class GetAllUsersWithOrganizationsUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
 

@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * @author bybuss
  */
-class GetAllUserTaskFromRoomUseCase @Inject constructor(
+class GetAllUserTaskUseCase @Inject constructor(
     private val userTaskRepository: UserTaskRepository
 ) {
 
